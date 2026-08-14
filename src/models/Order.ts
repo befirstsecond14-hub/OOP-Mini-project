@@ -1,12 +1,20 @@
 import { OrderItem } from './OrderItem'
 
+export type OrderStatus =
+  | 'รอรับออเดอร์'
+  | 'กำลังเตรียมอาหาร'
+  | 'พร้อมเสิร์ฟ'
+  | 'เสร็จสิ้น'
+
 export class Order {
   private items: OrderItem[] = []
-  private status: string = 'รอรับออเดอร์'
+
+  private status: OrderStatus = 'รอรับออเดอร์'
 
   constructor(
     private id: number,
-    private customerName: string
+    private customerName: string,
+    private tableNumber: number
   ) {}
 
   addItem(item: OrderItem): void {
@@ -14,11 +22,20 @@ export class Order {
   }
 
   removeItem(index: number): void {
-    this.items.splice(index, 1)
+    if (index >= 0 && index < this.items.length) {
+      this.items.splice(index, 1)
+    }
   }
 
   getItems(): OrderItem[] {
     return this.items
+  }
+
+  getTotalQuantity(): number {
+    return this.items.reduce(
+      (total, item) => total + item.getQuantity(),
+      0
+    )
   }
 
   getTotal(): number {
@@ -36,12 +53,15 @@ export class Order {
     return this.customerName
   }
 
-  getStatus(): string {
+  getTableNumber(): number {
+    return this.tableNumber
+  }
+
+  getStatus(): OrderStatus {
     return this.status
   }
 
-  setStatus(status: string): void {
+  setStatus(status: OrderStatus): void {
     this.status = status
   }
 }
-///จัดการออเดอร์//

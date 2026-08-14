@@ -6,7 +6,7 @@ export class Payment {
   constructor(
     private id: number,
     private order: Order,
-    private method: 'เงินสด' | 'โอนเงิน' | 'บัตร'
+    private method: 'เงินสด' | 'โอนเงิน' | 'บัตรเครดิต'
   ) {}
 
   getId(): number {

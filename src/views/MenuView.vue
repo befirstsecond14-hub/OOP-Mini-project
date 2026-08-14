@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useMenuStore } from '../stores/menuStore'
 import { useCartStore } from '../stores/cartStore'
+import { MenuItem } from '../models/MenuItem'
 
 const menuStore = useMenuStore()
 const cartStore = useCartStore()
@@ -9,7 +10,7 @@ const cartStore = useCartStore()
 const foods = computed(() => menuStore.foods)
 const drinks = computed(() => menuStore.drinks)
 
-function addToCart(item: any) {
+function addToCart(item: MenuItem): void {
   cartStore.addToCart(item)
 }
 
