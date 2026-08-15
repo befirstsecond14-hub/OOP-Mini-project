@@ -1,8 +1,7 @@
-
+```vue id="h3k8p2"
 <template>
   <nav class="navbar">
 
-    <!-- Logo -->
     <router-link
       to="/"
       class="logo"
@@ -16,7 +15,6 @@
       </span>
     </router-link>
 
-    <!-- Menu -->
     <div class="nav-links">
 
       <router-link to="/">
@@ -27,69 +25,102 @@
         เมนูอาหาร
       </router-link>
 
-      <!-- Admin -->
-      <router-link
-        to="/admin-login"
-        class="admin-button"
-      >
+      <router-link to="/admin-login">
         Admin
       </router-link>
 
     </div>
 
-    <!-- Cart -->
-    <router-link
-      to="/cart"
-      class="cart-button"
-    >
-      ตะกร้า
-    </router-link>
+    <div class="navbar-space"></div>
 
   </nav>
 </template>
 
 <style scoped>
 .navbar {
+  position: relative;
+
+  width: 100%;
   height: 70px;
+
   padding: 0 7%;
+
   display: flex;
   align-items: center;
-  justify-content: space-between;
+
   background: white;
+
   border-bottom: 1px solid #eee;
+
+  box-sizing: border-box;
 }
+
+/* =========================
+   LOGO
+========================= */
 
 .logo {
   display: flex;
   align-items: center;
+
   gap: 10px;
+
   color: #222;
+
   font-size: 20px;
   font-weight: bold;
+
   text-decoration: none;
+
+  flex-shrink: 0;
 }
 
 .logo-icon {
   width: 40px;
   height: 40px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   border-radius: 10px;
+
   background: #e85d04;
+
   color: white;
+
+  font-weight: bold;
 }
 
+/* =========================
+   MENU ตรงกลาง
+========================= */
+
 .nav-links {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
   display: flex;
   align-items: center;
-  gap: 30px;
+
+  gap: 35px;
 }
 
 .nav-links a {
   color: #555;
+
+  font-size: 14px;
+  font-weight: 500;
+
   text-decoration: none;
-  transition: 0.2s;
+
+  white-space: nowrap;
+
+  transition: color 0.2s ease;
 }
 
 .nav-links a:hover {
@@ -98,58 +129,86 @@
 
 .nav-links a.router-link-active {
   color: #e85d04;
+
   font-weight: bold;
 }
 
-/* Admin */
-.admin-button {
-  padding: 9px 16px;
-  border-radius: 8px;
-  background: #333;
-  color: white !important;
-  font-weight: bold;
-  text-decoration: none;
-  transition: 0.2s;
+/* =========================
+   พื้นที่ด้านขวา
+========================= */
+
+.navbar-space {
+  width: 40px;
 }
 
-.admin-button:hover {
-  background: #e85d04;
-}
-
-/* Cart */
-.cart-button {
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  background: #fff1e8;
-  color: #e85d04;
-  text-decoration: none;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.cart-button:hover {
-  background: #ffe2cf;
-}
+/* =========================
+   TABLET
+========================= */
 
 @media (max-width: 768px) {
+
   .navbar {
-    padding: 0 20px;
+    padding: 0 5%;
   }
 
   .nav-links {
-    gap: 15px;
+    gap: 22px;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+  }
+
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .navbar {
+    height: 64px;
+
+    padding: 0 4%;
   }
 
   .logo span {
     display: none;
   }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .nav-links {
+    gap: 14px;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+  }
+
 }
 
-@media (max-width: 600px) {
-  .nav-links {
-    display: none;
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 400px) {
+
+  .navbar {
+    padding: 0 3%;
   }
+
+  .nav-links {
+    gap: 9px;
+  }
+
+  .nav-links a {
+    font-size: 11px;
+  }
+
 }
 </style>
-

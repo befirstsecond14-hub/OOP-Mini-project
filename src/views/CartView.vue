@@ -1,3 +1,4 @@
+
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useCartStore } from '../stores/cartStore'
@@ -34,27 +35,34 @@ function clearCart(): void {
 
     <!-- Header -->
     <header class="cart-header">
-      <p class="section-title">
-        YOUR CART
-      </p>
+      <div class="cart-header-content">
+        <p class="section-label">
+          YOUR CART
+        </p>
 
-      <h1>
-        ตะกร้าของคุณ
-      </h1>
+        <h1>
+          ตะกร้าของคุณ
+        </h1>
 
-      <p>
-        ตรวจสอบรายการอาหารก่อนสั่งซื้อ
-      </p>
+        <p class="cart-description">
+          ตรวจสอบรายการอาหารก่อนสั่งซื้อ
+        </p>
+      </div>
     </header>
 
 
+    <!-- Main -->
     <main class="cart-container">
 
-      <!-- ตะกร้าว่าง -->
+      <!-- Empty -->
       <section
         v-if="items.length === 0"
         class="empty-cart"
       >
+        <div class="empty-icon">
+          🛒
+        </div>
+
         <h2>
           ตะกร้ายังว่าง
         </h2>
@@ -72,27 +80,32 @@ function clearCart(): void {
       </section>
 
 
-      <!-- มีสินค้า -->
+      <!-- Has Items -->
       <section v-else>
 
-        <!-- หัวข้อรายการ -->
+        <!-- Top -->
         <div class="cart-top">
+          <div>
+            <h2>
+              รายการอาหาร
+            </h2>
 
-          <h2>
-            รายการอาหาร
-          </h2>
+            <p>
+              {{ totalQuantity }} รายการ
+            </p>
+          </div>
 
           <button
+            type="button"
             class="clear-button"
             @click="clearCart"
           >
             ล้างตะกร้า
           </button>
-
         </div>
 
 
-        <!-- รายการสินค้า -->
+        <!-- Cart Items -->
         <div class="cart-list">
 
           <div
@@ -101,52 +114,64 @@ function clearCart(): void {
             class="cart-item"
           >
 
-            <!-- ข้อมูลอาหาร -->
+            <!-- Item -->
             <div class="item-info">
-
               <h3>
                 {{ item.getMenuItem().getName() }}
               </h3>
 
               <p>
-                {{ formatPrice(item.getMenuItem().getPrice()) }}
-                / ชิ้น
+                {{ formatPrice(item.getMenuItem().getPrice()) }} / ชิ้น
               </p>
-
             </div>
 
 
-            <!-- จำนวน -->
-            <div class="quantity-control">
-
-              <button
-                @click="decreaseQuantity(index)"
-                :disabled="item.getQuantity() <= 1"
-              >
-                −
-              </button>
-
-              <span>
-                {{ item.getQuantity() }}
+            <!-- Quantity -->
+            <div class="quantity-section">
+              <span class="quantity-label">
+                จำนวน
               </span>
 
-              <button
-                @click="increaseQuantity(index)"
-              >
-                +
-              </button>
+              <div class="quantity-control">
 
+                <button
+                  type="button"
+                  @click="decreaseQuantity(index)"
+                  :disabled="item.getQuantity() <= 1"
+                >
+                  −
+                </button>
+
+                <span>
+                  {{ item.getQuantity() }}
+                </span>
+
+                <button
+                  type="button"
+                  @click="increaseQuantity(index)"
+                >
+                  +
+                </button>
+
+              </div>
             </div>
 
 
-            <!-- ราคารวมของรายการ -->
+            <!-- Total -->
             <div class="item-total">
-              {{ formatPrice(item.getSubtotal()) }}
+              <span>
+                รวม
+              </span>
+
+              <strong>
+                {{ formatPrice(item.getSubtotal()) }}
+              </strong>
             </div>
 
 
-            <!-- ลบ -->
+            <!-- Remove -->
             <button
+              type="button"
               class="remove-button"
               @click="removeItem(index)"
             >
@@ -158,11 +183,16 @@ function clearCart(): void {
         </div>
 
 
-        <!-- สรุปตะกร้า -->
-        <div class="cart-summary">
+        <!-- Summary -->
+        <section class="cart-summary">
+
+          <div class="summary-header">
+            <h2>
+              สรุปคำสั่งซื้อ
+            </h2>
+          </div>
 
           <div class="summary-row">
-
             <span>
               จำนวนทั้งหมด
             </span>
@@ -170,12 +200,9 @@ function clearCart(): void {
             <strong>
               {{ totalQuantity }} รายการ
             </strong>
-
           </div>
 
-
           <div class="summary-row total-row">
-
             <span>
               ยอดรวม
             </span>
@@ -183,11 +210,8 @@ function clearCart(): void {
             <strong>
               {{ formatPrice(totalPrice) }}
             </strong>
-
           </div>
 
-
-          <!-- ไป Checkout -->
           <router-link
             to="/checkout"
             class="checkout-button"
@@ -195,7 +219,7 @@ function clearCart(): void {
             ดำเนินการสั่งซื้อ
           </router-link>
 
-        </div>
+        </section>
 
       </section>
 
@@ -206,139 +230,327 @@ function clearCart(): void {
 
 
 <style scoped>
-
 .cart-page {
-  min-height: 100vh;
+  min-height: calc(100vh - 70px);
+  width: 100%;
 
-  background: #f8f8f8;
+  background: #faf9f7;
 
-  padding-bottom: 60px;
+  padding: 0 20px 70px;
+
+  box-sizing: border-box;
 }
 
+
+/* ================================
+   HEADER
+================================ */
+
 .cart-header {
+  width: 100%;
+
+  padding: 55px 20px 40px;
+
+  box-sizing: border-box;
+
   text-align: center;
 
-  background: white;
+  background: #faf9f7;
+}
 
-  padding: 60px 20px 40px;
+.cart-header-content {
+  width: 100%;
+  max-width: 900px;
+
+  margin: 0 auto;
+}
+
+.section-label {
+  margin: 0 0 10px;
+
+  color: #e85d04;
+
+  font-size: 12px;
+  font-weight: bold;
+
+  letter-spacing: 3px;
 }
 
 .cart-header h1 {
-  font-size: 36px;
-
   margin: 0 0 10px;
+
+  color: #222;
+
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1.2;
 }
 
-.cart-header p:last-child {
+.cart-description {
+  margin: 0;
+
   color: #777;
+
+  font-size: 15px;
+}
+.cart-container {
+  width: 100%;
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  box-sizing: border-box;
+}
+.empty-cart {
+  width: 100%;
+
+  padding: 70px 30px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #eeeeee;
+  border-radius: 16px;
+
+  background: white;
+
+  text-align: center;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.05);
 }
 
-.cart-container {
-  max-width: 1000px;
+.empty-icon {
+  width: 70px;
+  height: 70px;
 
-  margin: 40px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  padding: 0 20px;
+  margin: 0 auto 20px;
+
+  border-radius: 16px;
+
+  background: #fff1e8;
+
+  font-size: 32px;
+}
+
+.empty-cart h2 {
+  margin: 0 0 10px;
+
+  color: #222;
+
+  font-size: 25px;
+}
+
+.empty-cart p {
+  margin: 0 0 25px;
+
+  color: #777;
+
+  font-size: 14px;
+}
+.menu-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+
+  padding: 0 22px;
+
+  border-radius: 8px;
+
+  background: #e85d04;
+  color: white;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  text-decoration: none;
+
+  transition: 0.2s;
+}
+
+.menu-button:hover {
+  background: #d94f00;
+
+  transform: translateY(-1px);
 }
 
 .cart-top {
   display: flex;
-
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
 
   margin-bottom: 20px;
 }
 
 .cart-top h2 {
-  margin: 0;
+  margin: 0 0 5px;
+
+  color: #222;
+
+  font-size: 26px;
 }
 
+.cart-top p {
+  margin: 0;
+
+  color: #888;
+
+  font-size: 13px;
+}
 .clear-button {
-  border: none;
+  flex-shrink: 0;
 
-  background: #eee;
+  min-height: 40px;
 
-  padding: 10px 18px;
+  padding: 0 16px;
 
+  border: 1px solid #eeeeee;
   border-radius: 8px;
 
+  background: white;
+  color: #666;
+
+  font-family: inherit;
+  font-size: 13px;
+
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
 .clear-button:hover {
-  background: #ddd;
+  border-color: #e85d04;
+
+  color: #e85d04;
+
+  background: #fff8f3;
 }
+
+
+/* ================================
+   CART LIST
+================================ */
 
 .cart-list {
   display: flex;
 
   flex-direction: column;
 
-  gap: 12px;
+  gap: 14px;
 }
-
 .cart-item {
   display: grid;
 
-  grid-template-columns:
-    1fr
-    auto
-    auto
-    auto;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
 
   align-items: center;
 
   gap: 25px;
 
+  width: 100%;
+
+  padding: 20px 22px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #eeeeee;
+  border-radius: 14px;
+
   background: white;
 
-  padding: 20px;
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.05);
 
-  border-radius: 12px;
+  transition: 0.2s;
+}
+
+.cart-item:hover {
+  border-color: #f1dfd2;
 
   box-shadow:
-    0 2px 10px
-    rgba(0, 0, 0, 0.05);
+    0 7px 22px rgba(0, 0, 0, 0.07);
+}
+.item-info {
+  min-width: 0;
 }
 
 .item-info h3 {
-  margin: 0 0 8px;
+  margin: 0 0 7px;
+
+  color: #222;
+
+  font-size: 17px;
+
+  overflow-wrap: anywhere;
 }
 
 .item-info p {
   margin: 0;
 
-  color: #777;
+  color: #888;
+
+  font-size: 13px;
+}
+.quantity-section {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.quantity-label {
+  color: #999;
+
+  font-size: 11px;
 }
 
 .quantity-control {
   display: flex;
-
   align-items: center;
 
-  gap: 12px;
+  gap: 10px;
 }
 
 .quantity-control button {
   width: 32px;
   height: 32px;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
   border: none;
+  border-radius: 8px;
 
-  border-radius: 6px;
-
-  background: #f36c21;
-
+  background: #e85d04;
   color: white;
 
   font-size: 20px;
+  line-height: 1;
 
   cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.quantity-control button:hover:not(:disabled) {
+  background: #d94f00;
 }
 
 .quantity-control button:disabled {
-  background: #ccc;
+  background: #ddd;
+
+  color: #999;
 
   cursor: not-allowed;
 }
@@ -346,138 +558,338 @@ function clearCart(): void {
 .quantity-control span {
   min-width: 25px;
 
+  color: #222;
+
   text-align: center;
 
+  font-size: 15px;
   font-weight: bold;
 }
-
 .item-total {
-  min-width: 100px;
+  min-width: 110px;
 
-  text-align: right;
+  display: flex;
+  flex-direction: column;
 
-  font-weight: bold;
+  align-items: flex-end;
+
+  gap: 4px;
+}
+
+.item-total span {
+  color: #999;
+
+  font-size: 11px;
+}
+
+.item-total strong {
+  color: #e85d04;
+
+  font-size: 16px;
 }
 .remove-button {
-  border: none;
+  min-height: 34px;
 
-  background: #ffe5e5;
+  padding: 0 12px;
+
+  border: 1px solid #f5d7d7;
+  border-radius: 8px;
+
+  background: #fff5f5;
 
   color: #d33;
 
-  padding: 8px 12px;
-
-  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12px;
 
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
 .remove-button:hover {
-  background: #ffd5d5;
+  border-color: #e8a0a0;
+
+  background: #ffeaea;
 }
 .cart-summary {
-  margin-top: 25px;
+  width: 100%;
 
-  background: white;
+  margin-top: 25px;
 
   padding: 25px;
 
-  border-radius: 12px;
+  box-sizing: border-box;
+
+  border: 1px solid #f1dfd2;
+  border-radius: 16px;
+
+  background: white;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.05);
 }
 
-.summary-row {
-  display: flex;
-
-  justify-content: space-between;
-
-  padding: 10px 0;
+.summary-header {
+  margin-bottom: 10px;
 }
 
-.total-row {
-  border-top: 1px solid #ddd;
+.summary-header h2 {
+  margin: 0;
 
-  margin-top: 10px;
-
-  padding-top: 20px;
+  color: #222;
 
   font-size: 22px;
 }
 
+.summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 12px 0;
+
+  color: #666;
+
+  font-size: 14px;
+}
+
+.summary-row strong {
+  color: #222;
+}
+
+.total-row {
+  margin-top: 5px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #eeeeee;
+
+  font-size: 20px;
+}
+
 .total-row strong {
-  color: #f36c21;
+  color: #e85d04;
+
+  font-size: 22px;
 }
 .checkout-button {
-  display: block;
-
   width: 100%;
+
+  min-height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   margin-top: 20px;
 
-  padding: 15px;
+  padding: 0 20px;
 
-  border: none;
+  box-sizing: border-box;
 
-  border-radius: 8px;
+  border-radius: 9px;
 
-  background: #f36c21;
-
+  background: #e85d04;
   color: white;
 
-  font-size: 17px;
-
+  font-size: 15px;
   font-weight: bold;
-
-  text-align: center;
 
   text-decoration: none;
 
-  cursor: pointer;
+  transition: 0.2s;
 }
 
 .checkout-button:hover {
-  background: #df5c15;
+  background: #d94f00;
+
+  transform: translateY(-1px);
 }
+@media (max-width: 850px) {
 
-.empty-cart {
-  background: white;
+  .cart-page {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
 
-  text-align: center;
-
-  padding: 70px 20px;
-
-  border-radius: 12px;
-}
-
-.empty-cart h2 {
-  margin-bottom: 10px;
-}
-
-.empty-cart p {
-  color: #777;
-
-  margin-bottom: 25px;
-}
-
-
-@media (max-width: 700px) {
+  .cart-header {
+    padding-top: 45px;
+  }
 
   .cart-item {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) auto;
 
-    gap: 15px;
+    gap: 18px;
+  }
+
+  .quantity-section {
+    align-items: flex-end;
   }
 
   .item-total {
-    text-align: left;
+    align-items: flex-start;
+  }
+
+  .remove-button {
+    justify-self: start;
+  }
+}
+@media (max-width: 600px) {
+
+  .cart-page {
+    padding-right: 14px;
+    padding-left: 14px;
+    padding-bottom: 50px;
+  }
+
+  .cart-header {
+    padding: 35px 10px 30px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+
+  .cart-header h1 {
+    font-size: 30px;
+  }
+
+  .cart-description {
+    font-size: 13px;
   }
 
   .cart-top {
     align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 12px;
+  }
+
+  .cart-top h2 {
+    font-size: 23px;
+  }
+
+  .clear-button {
+    width: 100%;
+  }
+
+  .cart-item {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 16px;
+
+    padding: 18px;
+  }
+
+  .item-info h3 {
+    font-size: 16px;
+  }
+
+  .quantity-section {
+    align-items: flex-start;
+  }
+
+  .quantity-control {
+    gap: 12px;
+  }
+
+  .quantity-control button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .item-total {
+    min-width: 0;
+
+    align-items: flex-start;
+
+    padding-top: 12px;
+
+    border-top: 1px solid #eeeeee;
+  }
+
+  .item-total strong {
+    font-size: 17px;
+  }
+
+  .remove-button {
+    width: 100%;
+  }
+
+  .cart-summary {
+    padding: 20px;
+
+    border-radius: 14px;
+  }
+
+  .summary-row {
+    font-size: 13px;
+  }
+
+  .total-row {
+    font-size: 18px;
+  }
+
+  .total-row strong {
+    font-size: 20px;
+  }
+
+  .empty-cart {
+    padding: 50px 20px;
+  }
+
+  .empty-cart h2 {
+    font-size: 22px;
+  }
+
+  .empty-cart p {
+    line-height: 1.6;
+  }
+
+  .menu-button {
+    width: 100%;
+  }
+}
+
+
+@media (max-width: 380px) {
+
+  .cart-page {
+    padding-right: 10px;
+    padding-left: 10px;
   }
 
   .cart-header h1 {
-    font-size: 28px;
+    font-size: 27px;
   }
 
+  .cart-item {
+    padding: 15px;
+  }
+
+  .cart-summary {
+    padding: 17px;
+  }
+
+  .summary-row {
+    gap: 10px;
+
+    font-size: 12px;
+  }
+
+  .total-row strong {
+    font-size: 18px;
+  }
 }
+
 </style>
+

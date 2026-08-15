@@ -247,199 +247,322 @@ function goToMenu(): void {
   </main>
 </template>
 
+```css
 <style scoped>
 
 .payment-page {
   min-height: calc(100vh - 70px);
-  background: #f8f8f8;
   padding: 50px 20px 70px;
   box-sizing: border-box;
+  background: #faf9f7;
 }
 
+/* =========================
+   PAYMENT
+========================= */
+
 .payment-container {
-  max-width: 600px;
+  width: 100%;
+  max-width: 650px;
   margin: 0 auto;
 }
 
 .payment-header {
+  margin-bottom: 30px;
   text-align: center;
-  margin-bottom: 35px;
 }
 
 .subtitle {
+  margin: 0 0 8px;
   color: #e85d04;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
   letter-spacing: 3px;
-  margin: 0 0 10px;
 }
 
 .payment-header h1 {
   margin: 0 0 10px;
-  font-size: 38px;
+  color: #222;
+  font-size: 40px;
+  line-height: 1.2;
 }
 
 .payment-header p:last-child {
-  color: #777;
   margin: 0;
+  color: #777;
+  font-size: 15px;
 }
 
+/* =========================
+   PAYMENT CARD
+========================= */
+
 .payment-card {
-  background: white;
   padding: 30px;
+  border: 1px solid #eeeeee;
   border-radius: 16px;
+  background: white;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
 }
 
+/* =========================
+   PRICE
+========================= */
+
 .price-box {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+
   gap: 20px;
-  padding: 20px;
+
   margin-bottom: 25px;
+  padding: 20px;
+
+  border: 1px solid #f5d7c1;
   border-radius: 12px;
-  background: #fff3e8;
+
+  background: #fff1e8;
 }
 
 .price-box span {
   color: #555;
+  font-size: 15px;
 }
 
 .price-box strong {
   color: #e85d04;
   font-size: 24px;
+  font-weight: bold;
 }
 
+/* =========================
+   FORM
+========================= */
+
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .form-group label {
   display: block;
+
   margin-bottom: 8px;
+
+  color: #222;
+  font-size: 15px;
   font-weight: bold;
 }
 
 .form-group select {
   width: 100%;
-  box-sizing: border-box;
-  padding: 13px;
+  padding: 13px 14px;
+
   border: 1px solid #ddd;
   border-radius: 8px;
+
   background: white;
+  color: #333;
+
+  font-family: inherit;
   font-size: 15px;
+
+  outline: none;
+  cursor: pointer;
 }
 
+.form-group select:focus {
+  border-color: #e85d04;
+}
+
+/* =========================
+   PAYMENT INFO
+========================= */
+
 .payment-info {
-  padding: 20px;
   margin-bottom: 20px;
-  border-radius: 10px;
-  background: #f8f8f8;
+  padding: 20px;
+
+  border: 1px solid #f1dfd2;
+  border-radius: 12px;
+
+  background: #faf9f7;
 }
 
 .payment-info h3 {
   margin: 0 0 15px;
+
+  color: #222;
+  font-size: 17px;
 }
 
 .payment-info p {
-  color: #555;
   margin: 8px 0;
+
+  color: #666;
+  font-size: 14px;
 }
 
 .payment-info input {
   width: 100%;
   box-sizing: border-box;
-  padding: 12px;
+
   margin-top: 10px;
+  padding: 12px 14px;
+
   border: 1px solid #ddd;
   border-radius: 8px;
+
+  background: white;
+
+  font-family: inherit;
   font-size: 15px;
+
+  outline: none;
 }
+
+.payment-info input:focus {
+  border-color: #e85d04;
+}
+
+/* =========================
+   BUTTON
+========================= */
 
 .payment-button {
   width: 100%;
+
   padding: 14px;
+
   border: none;
   border-radius: 8px;
+
   background: #e85d04;
   color: white;
-  font-size: 16px;
+
+  font-family: inherit;
+  font-size: 15px;
   font-weight: bold;
+
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
 .payment-button:hover {
   background: #d94f00;
+  transform: translateY(-1px);
 }
 
 .back-button {
   width: 100%;
+
   margin-top: 10px;
-  padding: 12px;
+  padding: 13px;
+
   border: 1px solid #ddd;
   border-radius: 8px;
+
   background: white;
   color: #555;
+
+  font-family: inherit;
   font-size: 15px;
+
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
 .back-button:hover {
-  background: #f5f5f5;
+  border-color: #e85d04;
+  color: #e85d04;
+  background: #fffaf7;
 }
 
+/* =========================
+   SUCCESS
+========================= */
+
 .success-container {
+  width: 100%;
   max-width: 650px;
-  margin: 30px auto;
+
+  margin: 20px auto;
 }
 
 .success-card {
-  background: white;
   padding: 50px 35px;
+
+  border: 1px solid #eeeeee;
   border-radius: 18px;
+
+  background: white;
+
   text-align: center;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.07);
 }
 
 .success-icon {
   width: 70px;
   height: 70px;
-  margin: 0 auto 20px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  margin: 0 auto 20px;
+
   border-radius: 50%;
+
   background: #e8f8ed;
   color: #2e9d50;
+
   font-size: 40px;
   font-weight: bold;
 }
 
 .success-card h1 {
   margin: 10px 0;
+
+  color: #222;
+  font-size: 32px;
 }
 
 .success-message {
-  color: #777;
   margin: 0;
+
+  color: #777;
+  font-size: 15px;
 }
+
+/* =========================
+   PAYMENT DETAIL
+========================= */
 
 .payment-detail {
   margin-top: 30px;
   padding: 20px;
+
+  border: 1px solid #eeeeee;
   border-radius: 12px;
-  background: #f8f8f8;
+
+  background: #faf9f7;
+
   text-align: left;
 }
 
 .detail-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+
   gap: 20px;
-  padding: 12px 0;
-  border-bottom: 1px solid #ddd;
+
+  padding: 13px 0;
+
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .detail-row:last-child {
@@ -448,52 +571,108 @@ function goToMenu(): void {
 
 .detail-row span {
   color: #777;
+  font-size: 14px;
 }
 
-.status {
+.detail-row strong {
+  color: #333;
+  font-size: 14px;
+}
+
+.detail-row .status {
   color: #2e9d50;
 }
 
+/* =========================
+   SUCCESS BUTTONS
+========================= */
+
 .buttons {
   display: flex;
+
   gap: 10px;
+
   margin-top: 25px;
 }
 
 .order-button,
 .menu-button {
   flex: 1;
+
   padding: 13px;
+
   border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: bold;
+
   cursor: pointer;
-  font-size: 15px;
+
+  transition: 0.2s;
 }
 
 .order-button {
   border: none;
+
   background: #e85d04;
   color: white;
 }
 
+.order-button:hover {
+  background: #d94f00;
+  transform: translateY(-1px);
+}
+
 .menu-button {
   border: 1px solid #ddd;
+
   background: white;
   color: #555;
 }
 
+.menu-button:hover {
+  border-color: #e85d04;
+  color: #e85d04;
+  background: #fffaf7;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
 @media (max-width: 600px) {
+
+  .payment-page {
+    padding: 40px 18px 60px;
+  }
+
+  .payment-card {
+    padding: 25px 20px;
+  }
+
+  .payment-header h1 {
+    font-size: 32px;
+  }
+
+  .price-box {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .success-card {
+    padding: 40px 20px;
+  }
+
+  .success-card h1 {
+    font-size: 28px;
+  }
+
   .buttons {
     flex-direction: column;
   }
 
-  .payment-header h1 {
-    font-size: 30px;
-  }
-
-  .price-box {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 
 </style>
+```
