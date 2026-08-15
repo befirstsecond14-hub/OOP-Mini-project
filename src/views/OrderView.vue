@@ -74,16 +74,23 @@ function getStatusStep(): number {
 <template>
   <main class="order-page">
 
+    <!-- Header -->
     <header class="order-header">
-      <p class="subtitle">YOUR ORDER</p>
+      <p class="subtitle">
+        YOUR ORDER
+      </p>
 
-      <h1>รายการออเดอร์</h1>
+      <h1>
+        รายการออเดอร์
+      </h1>
 
       <p>
         ตรวจสอบสถานะการสั่งซื้อของคุณ
       </p>
     </header>
 
+
+    <!-- มี Order -->
     <section
       v-if="currentOrder"
       class="order-card"
@@ -93,7 +100,9 @@ function getStatusStep(): number {
       <div class="order-top">
 
         <div>
-          <span>เลขที่ออเดอร์</span>
+          <span>
+            เลขที่ออเดอร์
+          </span>
 
           <h2>
             #{{ orderId }}
@@ -106,11 +115,14 @@ function getStatusStep(): number {
 
       </div>
 
+
       <!-- ข้อมูลลูกค้า -->
       <div class="customer-info">
 
         <div>
-          <span>ชื่อผู้สั่งซื้อ</span>
+          <span>
+            ชื่อผู้สั่งซื้อ
+          </span>
 
           <strong>
             {{ customerName }}
@@ -118,7 +130,9 @@ function getStatusStep(): number {
         </div>
 
         <div>
-          <span>เลขโต๊ะ</span>
+          <span>
+            เลขโต๊ะ
+          </span>
 
           <strong>
             โต๊ะ {{ tableNumber }}
@@ -126,7 +140,9 @@ function getStatusStep(): number {
         </div>
 
         <div>
-          <span>สถานะการชำระเงิน</span>
+          <span>
+            สถานะการชำระเงิน
+          </span>
 
           <strong class="paid">
             ชำระเงินแล้ว
@@ -135,10 +151,13 @@ function getStatusStep(): number {
 
       </div>
 
+
       <!-- รายการอาหาร -->
       <section class="items-section">
 
-        <h2>รายการอาหาร</h2>
+        <h2>
+          รายการอาหาร
+        </h2>
 
         <div
           v-for="(item, index) in orderItems"
@@ -162,6 +181,7 @@ function getStatusStep(): number {
 
         </div>
 
+
         <div
           v-if="orderItems.length === 0"
           class="empty-order"
@@ -171,7 +191,8 @@ function getStatusStep(): number {
 
       </section>
 
-      <!-- ยอดรวม -->
+
+      <!-- จำนวนทั้งหมด -->
       <div class="total">
 
         <span>
@@ -184,6 +205,8 @@ function getStatusStep(): number {
 
       </div>
 
+
+      <!-- ยอดรวม -->
       <div class="total total-price">
 
         <span>
@@ -196,67 +219,147 @@ function getStatusStep(): number {
 
       </div>
 
+
       <!-- สถานะออเดอร์ -->
-      <div class="order-status">
+      <section class="status-section">
 
-        <div
-          class="status-step"
-          :class="{ active: getStatusStep() >= 1 }"
-        >
-          <div class="circle">
-            <span v-if="getStatusStep() > 1">✓</span>
-            <span v-else>1</span>
+        <h2>
+          สถานะออเดอร์
+        </h2>
+
+
+        <div class="order-status">
+
+          <!-- ขั้นที่ 1 -->
+          <div
+            class="status-step"
+            :class="{ active: getStatusStep() >= 1 }"
+          >
+
+            <div class="circle">
+
+              <span v-if="getStatusStep() > 1">
+                ✓
+              </span>
+
+              <span v-else>
+                1
+              </span>
+
+            </div>
+
+            <span>
+              รับออเดอร์
+            </span>
+
           </div>
 
-          <span>
-            รับออเดอร์
-          </span>
-        </div>
 
-        <div
-          class="line"
-          :class="{ active: getStatusStep() >= 2 }"
-        ></div>
+          <!-- เส้น -->
+          <div
+            class="line"
+            :class="{ active: getStatusStep() >= 2 }"
+          ></div>
 
-        <div
-          class="status-step"
-          :class="{ active: getStatusStep() >= 2 }"
-        >
-          <div class="circle">
-            <span v-if="getStatusStep() > 2">✓</span>
-            <span v-else>2</span>
+
+          <!-- ขั้นที่ 2 -->
+          <div
+            class="status-step"
+            :class="{ active: getStatusStep() >= 2 }"
+          >
+
+            <div class="circle">
+
+              <span v-if="getStatusStep() > 2">
+                ✓
+              </span>
+
+              <span v-else>
+                2
+              </span>
+
+            </div>
+
+            <span>
+              กำลังเตรียมอาหาร
+            </span>
+
           </div>
 
-          <span>
-            กำลังเตรียมอาหาร
-          </span>
-        </div>
 
-        <div
-          class="line"
-          :class="{ active: getStatusStep() >= 3 }"
-        ></div>
+          <!-- เส้น -->
+          <div
+            class="line"
+            :class="{ active: getStatusStep() >= 3 }"
+          ></div>
 
-        <div
-          class="status-step"
-          :class="{ active: getStatusStep() >= 3 }"
-        >
-          <div class="circle">
-            <span v-if="getStatusStep() > 3">✓</span>
-            <span v-else>3</span>
+
+          <!-- ขั้นที่ 3 -->
+          <div
+            class="status-step"
+            :class="{ active: getStatusStep() >= 3 }"
+          >
+
+            <div class="circle">
+
+              <span v-if="getStatusStep() > 3">
+                ✓
+              </span>
+
+              <span v-else>
+                3
+              </span>
+
+            </div>
+
+            <span>
+              พร้อมเสิร์ฟ
+            </span>
+
           </div>
 
-          <span>
-            พร้อมเสิร์ฟ
-          </span>
+
+          <!-- เส้น -->
+          <div
+            class="line"
+            :class="{ active: getStatusStep() >= 4 }"
+          ></div>
+
+
+          <!-- ขั้นที่ 4 -->
+          <div
+            class="status-step"
+            :class="{ active: getStatusStep() >= 4 }"
+          >
+
+            <div class="circle">
+
+              <span v-if="getStatusStep() > 4">
+                ✓
+              </span>
+
+              <span v-else>
+                4
+              </span>
+
+            </div>
+
+            <span>
+              เสร็จสิ้น
+            </span>
+
+          </div>
+
         </div>
 
-      </div>
+      </section>
+
 
       <!-- ปุ่ม -->
       <div class="buttons">
 
         <button
+          type="button"
           class="menu-button"
           @click="goToMenu"
         >
@@ -264,6 +367,7 @@ function getStatusStep(): number {
         </button>
 
         <button
+          type="button"
           class="home-button"
           @click="goToHome"
         >
@@ -274,7 +378,8 @@ function getStatusStep(): number {
 
     </section>
 
-    <!-- กรณีไม่มี Order -->
+
+    <!-- ไม่มี Order -->
     <section
       v-else
       class="empty-card"
@@ -289,6 +394,7 @@ function getStatusStep(): number {
       </p>
 
       <button
+        type="button"
         class="menu-button"
         @click="goToMenu"
       >
@@ -300,51 +406,93 @@ function getStatusStep(): number {
   </main>
 </template>
 
+
 <style scoped>
+
 .order-page {
   min-height: calc(100vh - 70px);
+
   background: #f8f8f8;
+
   padding: 50px 20px 70px;
+
   box-sizing: border-box;
 }
 
+
+/* =========================
+   HEADER
+========================= */
+
 .order-header {
   text-align: center;
+
   margin-bottom: 35px;
 }
 
 .subtitle {
   color: #e85d04;
+
   font-size: 13px;
+
   font-weight: bold;
+
   letter-spacing: 3px;
+
   margin: 0 0 10px;
 }
 
 .order-header h1 {
   margin: 0 0 10px;
+
   font-size: 38px;
 }
 
 .order-header p:last-child {
   color: #777;
+
   margin: 0;
 }
 
+
+/* =========================
+   ORDER CARD
+========================= */
+
 .order-card {
+  width: 100%;
+
   max-width: 800px;
+
   margin: auto;
+
   padding: 30px;
+
   background: white;
+
   border-radius: 16px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+
+  box-shadow:
+    0 5px 20px
+    rgba(0, 0, 0, 0.06);
+
+  box-sizing: border-box;
 }
+
+
+/* =========================
+   ORDER TOP
+========================= */
 
 .order-top {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
   padding-bottom: 20px;
+
   border-bottom: 1px solid #eee;
 }
 
@@ -356,31 +504,57 @@ function getStatusStep(): number {
   margin: 5px 0 0;
 }
 
+
+/* =========================
+   STATUS BADGE
+========================= */
+
 .status {
   padding: 10px 15px;
+
   border-radius: 20px;
+
   background: #fff3e8;
+
   color: #e85d04;
+
   font-weight: bold;
 }
 
+
+/* =========================
+   CUSTOMER INFO
+========================= */
+
 .customer-info {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+
+  grid-template-columns:
+    1fr 1fr 1fr;
+
   gap: 20px;
+
   padding: 25px 0;
+
   border-bottom: 1px solid #eee;
 }
 
 .customer-info span {
   display: block;
+
   margin-bottom: 6px;
+
   color: #777;
 }
 
 .paid {
   color: #2e9d50;
 }
+
+
+/* =========================
+   ITEMS
+========================= */
 
 .items-section {
   padding: 25px 0;
@@ -392,9 +566,15 @@ function getStatusStep(): number {
 
 .order-item {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
+  gap: 20px;
+
   padding: 15px 0;
+
   border-bottom: 1px solid #eee;
 }
 
@@ -404,25 +584,40 @@ function getStatusStep(): number {
 
 .order-item p {
   margin: 0;
+
   color: #777;
 }
 
 .order-item strong {
   color: #e85d04;
+
   font-size: 16px;
+
+  white-space: nowrap;
 }
 
 .empty-order {
   padding: 20px 0;
+
   color: #777;
 }
 
+
+/* =========================
+   TOTAL
+========================= */
+
 .total {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
   padding: 15px 0;
+
   font-size: 17px;
+
   border-bottom: 1px solid #eee;
 }
 
@@ -434,87 +629,198 @@ function getStatusStep(): number {
   font-size: 22px;
 }
 
+
+/* =========================
+   STATUS SECTION
+========================= */
+
+.status-section {
+  margin-top: 30px;
+
+  padding: 25px 0;
+}
+
+.status-section h2 {
+  margin: 0 0 25px;
+
+  text-align: center;
+
+  font-size: 20px;
+}
+
+
+/* =========================
+   ORDER STATUS
+========================= */
+
 .order-status {
   display: flex;
-  align-items: center;
+
+  align-items: flex-start;
+
   justify-content: center;
-  margin: 35px 0;
+
+  width: 100%;
 }
 
 .status-step {
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   gap: 8px;
+
+  min-width: 100px;
+
   text-align: center;
 }
 
 .circle {
   width: 40px;
+
   height: 40px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   border-radius: 50%;
+
   background: #ddd;
+
   color: white;
+
   font-weight: bold;
+
+  flex-shrink: 0;
 }
 
 .status-step.active .circle {
   background: #e85d04;
+
+  box-shadow:
+    0 0 0 5px #fff3e8;
 }
 
 .status-step span {
   font-size: 13px;
+
   color: #777;
+
+  white-space: nowrap;
 }
 
+.status-step.active > span {
+  color: #e85d04;
+
+  font-weight: bold;
+}
+
+
+/* =========================
+   STATUS LINE
+========================= */
+
 .line {
-  width: 80px;
+  width: 55px;
+
   height: 2px;
-  margin: 0 10px;
+
+  margin: 20px 5px 0;
+
   background: #ddd;
+
+  flex-shrink: 1;
 }
 
 .line.active {
   background: #e85d04;
 }
 
+
+/* =========================
+   BUTTONS
+========================= */
+
 .buttons {
   display: flex;
+
   gap: 10px;
+
+  margin-top: 25px;
 }
 
 .menu-button,
 .home-button {
   flex: 1;
+
   padding: 13px;
+
   border-radius: 8px;
+
   cursor: pointer;
+
   font-size: 15px;
+
+  transition:
+    0.2s ease;
 }
 
 .menu-button {
   border: none;
+
   background: #e85d04;
+
   color: white;
+}
+
+.menu-button:hover {
+  background: #d94f00;
+
+  transform: translateY(-1px);
 }
 
 .home-button {
   border: 1px solid #ddd;
+
   background: white;
+
   color: #555;
 }
 
+.home-button:hover {
+  background: #f5f5f5;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
 .empty-card {
+  width: 100%;
+
   max-width: 500px;
+
   margin: auto;
+
   padding: 50px 30px;
+
   background: white;
+
   border-radius: 16px;
+
   text-align: center;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+
+  box-shadow:
+    0 5px 20px
+    rgba(0, 0, 0, 0.06);
+
+  box-sizing: border-box;
 }
 
 .empty-card h2 {
@@ -523,6 +829,7 @@ function getStatusStep(): number {
 
 .empty-card p {
   color: #777;
+
   margin-bottom: 25px;
 }
 
@@ -530,11 +837,55 @@ function getStatusStep(): number {
   width: 100%;
 }
 
-@media (max-width: 700px) {
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 800px) {
+
+  .order-status {
+    overflow-x: auto;
+
+    justify-content: flex-start;
+
+    padding: 10px 5px 20px;
+  }
+
+  .status-step {
+    min-width: 105px;
+  }
+
+  .line {
+    width: 35px;
+  }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .order-page {
+    padding: 35px 15px 50px;
+  }
+
+  .order-card {
+    padding: 25px 20px;
+  }
+
+  .order-header h1 {
+    font-size: 30px;
+  }
 
   .order-top {
     flex-direction: column;
+
     align-items: flex-start;
+
     gap: 15px;
   }
 
@@ -544,12 +895,23 @@ function getStatusStep(): number {
 
   .order-status {
     flex-direction: column;
-    gap: 10px;
+
+    align-items: center;
+
+    gap: 0;
+
+    overflow-x: visible;
+  }
+
+  .status-step {
+    min-width: 120px;
   }
 
   .line {
     width: 2px;
+
     height: 30px;
+
     margin: 0;
   }
 
@@ -557,8 +919,42 @@ function getStatusStep(): number {
     flex-direction: column;
   }
 
-  .order-header h1 {
-    font-size: 30px;
+  .order-item {
+    align-items: flex-start;
   }
+
+  .total-price {
+    font-size: 20px;
+  }
+
 }
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 400px) {
+
+  .order-card {
+    padding: 20px 15px;
+  }
+
+  .order-header h1 {
+    font-size: 27px;
+  }
+
+  .order-item {
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
+  .order-item strong {
+    align-self: flex-end;
+  }
+
+}
+
 </style>
+

@@ -1,17 +1,22 @@
-//คลาสแม่ สินค้า  Abstraction + Encapsulation//
+ // คลาสแม่สินค้า
+ // Abstraction + Encapsulation
+
 export abstract class MenuItem {
   private id: number
   private name: string
   private price: number
+  private imageUrl: string
 
   constructor(
     id: number,
     name: string,
-    price: number
+    price: number,
+    imageUrl: string
   ) {
     this.id = id
     this.name = name
     this.price = price
+    this.imageUrl = imageUrl
   }
 
   getId(): number {
@@ -26,12 +31,20 @@ export abstract class MenuItem {
     return this.price
   }
 
+  getImageUrl(): string {
+    return this.imageUrl
+  }
+
   setName(name: string): void {
     this.name = name
   }
 
   setPrice(price: number): void {
     this.price = price
+  }
+
+  setImageUrl(imageUrl: string): void {
+    this.imageUrl = imageUrl
   }
 
   abstract getType(): string

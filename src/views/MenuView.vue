@@ -43,7 +43,6 @@ function formatPrice(price: number): string {
 
       </div>
 
-
       <!-- Cart Summary -->
       <router-link
         to="/cart"
@@ -100,9 +99,10 @@ function formatPrice(price: number): string {
           <!-- Image -->
           <div class="food-image">
 
-            <span>
-              🍽️
-            </span>
+            <img
+              :src="item.getImageUrl()"
+              :alt="item.getName()"
+            />
 
           </div>
 
@@ -113,7 +113,6 @@ function formatPrice(price: number): string {
             <h3>
               {{ item.getName() }}
             </h3>
-
 
             <div class="menu-bottom">
 
@@ -169,9 +168,10 @@ function formatPrice(price: number): string {
           <!-- Image -->
           <div class="food-image">
 
-            <span>
-              🥤
-            </span>
+            <img
+              :src="item.getImageUrl()"
+              :alt="item.getName()"
+            />
 
           </div>
 
@@ -182,7 +182,6 @@ function formatPrice(price: number): string {
             <h3>
               {{ item.getName() }}
             </h3>
-
 
             <div class="menu-bottom">
 
@@ -523,28 +522,26 @@ function formatPrice(price: number): string {
 
 .food-image {
   width: 100%;
-  height: 170px;
+  height: 220px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
 
-  /*
-    ใช้สีเดียวกันทั้งอาหารและเครื่องดื่ม
-  */
   background: #fff1e8;
-
-  font-size: 72px;
 }
 
-.food-image span {
+.food-image img {
+  width: 100%;
+  height: 100%;
+
   display: block;
+
+  object-fit: cover;
 
   transition: transform 0.25s ease;
 }
 
-.menu-card:hover .food-image span {
-  transform: scale(1.08);
+.menu-card:hover .food-image img {
+  transform: scale(1.05);
 }
 
 
@@ -834,9 +831,7 @@ function formatPrice(price: number): string {
   /* Card */
 
   .food-image {
-    height: 160px;
-
-    font-size: 65px;
+    height: 180px;
   }
 
 
@@ -904,9 +899,7 @@ function formatPrice(price: number): string {
 
 
   .food-image {
-    height: 145px;
-
-    font-size: 58px;
+    height: 165px;
   }
 
 
