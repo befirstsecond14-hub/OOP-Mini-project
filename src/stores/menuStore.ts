@@ -18,74 +18,67 @@ export const useMenuStore = defineStore('menu', {
       // อาหาร 10 เมนู
       // ==================================================
 
+    
       new Food(
         1,
-        'ข้าวกะเพราไก่',
-        59,
-        'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80'
+        'ข้าวกะเพราหมูสับ',
+        65,
+        'https://www.tecnoplusthai.com/wp-content/uploads/2025/08/9.3.webp'
       ),
 
       new Food(
         2,
-        'ข้าวกะเพราหมูสับ',
-        65,
-        'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80'
+        'ข้าวกะเพราหมูกรอบ',
+        75,
+        'https://img.magnific.com/premium-photo/stir-fried-crispy-pork-belly-basil-with-rice_1339-101235.jpg'
       ),
 
       new Food(
         3,
-        'ข้าวกะเพราหมูกรอบ',
-        75,
-        'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80'
+        'ข้าวพะแนงหมู',
+        79,
+        'https://img.wongnai.com/p/400x0/2020/05/02/88eee944f68f48b2b4805d9f1f0ebb35.jpg'
       ),
 
       new Food(
         4,
-        'ข้าวกะเพราเนื้อ',
-        79,
-        'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80'
+        'ข้าวผัดหมู',
+        65,
+        'https://s359.kapook.com/pagebuilder/d0b8a629-aded-4ff0-b623-6511bc54fb52.jpg'
       ),
 
       new Food(
         5,
-        'ข้าวผัดหมู',
+        'สุกกี้น้ำหมู',
         65,
-        'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80'
+        'https://api2.krua.co/wp-content/uploads/2020/06/SlideBanner_RI0194_1140x507.jpg'
       ),
 
       new Food(
         6,
-        'ข้าวผัดไก่',
-        65,
-        'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80'
+        'ข้าวผัดกุ้ง',
+        79,
+        'https://img.wongnai.com/p/1920x0/2020/03/06/d34e8f779cd94f18ac43aeab11a5239f.jpg'
       ),
 
       new Food(
         7,
-        'ข้าวผัดกุ้ง',
-        79,
-        'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80'
-      ),
-
-      new Food(
-        8,
         'ผัดไทยกุ้ง',
         79,
         'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80'
       ),
 
       new Food(
-        9,
+        8,
         'ข้าวมันไก่',
         60,
-        'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=80'
-      ),
-
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPJGqep_3ExRtiz9zT2GyZawa1tjoUrW8yn63TbgNHjacZnfAKnTcVZoWN&s=10'
+        ),
       new Food(
-        10,
+        9,
         'ข้าวหมูกระเทียม',
         65,
-        'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80'
+        'https://static.thairath.co.th/media/dFQROr7oWzulq5Fa6rpMP0IwcTkY7Nk2F3IyFKD0yKg6lqZeUbBLmw4CO8n7O7eRDtY.jpg'
       ),
 
       // ==================================================
@@ -117,7 +110,7 @@ export const useMenuStore = defineStore('menu', {
         104,
         'ชาเขียว',
         45,
-        'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=800&q=80'
+        'https://www.playglao.co/wp-content/uploads/2021/10/%E0%B8%8A%E0%B8%B2%E0%B9%80%E0%B8%82%E0%B8%B5%E0%B8%A2%E0%B8%A7%E0%B9%80%E0%B8%A2%E0%B9%87%E0%B8%99%E0%B8%9B%E0%B8%B1%E0%B9%88%E0%B8%99-01_web.png'
       ),
 
       new Drink(

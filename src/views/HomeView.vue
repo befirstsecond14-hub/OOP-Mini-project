@@ -4,10 +4,12 @@ import { computed } from 'vue'
 import { useMenuStore } from '../stores/menuStore'
 
 const menuStore = useMenuStore()
+
 const recommendedMenus = computed(() => {
   return menuStore.foods.slice(0, 4)
 })
 
+ 
 function formatPrice(price: number): string {
   return `${price.toLocaleString()} บาท`
 }
@@ -15,12 +17,8 @@ function formatPrice(price: number): string {
 
 <template>
   <main class="home">
-
-    <!-- =========================
-         HERO
-    ========================== -->
-
     <section class="hero">
+
       <div class="hero-overlay"></div>
 
       <div class="hero-content">
@@ -45,7 +43,11 @@ function formatPrice(price: number): string {
           อร่อย สดใหม่ และสั่งง่ายในไม่กี่ขั้นตอน
         </p>
 
+        <!-- ปุ่มหลัก -->
+
         <div class="hero-actions">
+
+          <!-- ไปหน้าเมนู -->
 
           <router-link
             to="/menu"
@@ -55,63 +57,91 @@ function formatPrice(price: number): string {
             <span>→</span>
           </router-link>
 
+
+          <!-- แก้จาก /order เป็น /cart
+               เพราะ Router ของเรามี /cart -->
+
           <router-link
-            to="/order"
+            to="/cart"
             class="order-button"
           >
-            ดูออเดอร์
+            ดูตะกร้า
           </router-link>
 
         </div>
 
+
+        <!-- จุดเด่น -->
+
         <div class="features">
 
           <div class="feature">
+
             <div class="feature-icon">
               ✓
             </div>
 
             <div>
-              <strong>สั่งง่าย</strong>
-              <span>เลือกเมนูได้ทันที</span>
+              <strong>
+                สั่งง่าย
+              </strong>
+
+              <span>
+                เลือกเมนูได้ทันที
+              </span>
             </div>
+
           </div>
 
+
           <div class="feature">
+
             <div class="feature-icon">
               ⚡
             </div>
 
             <div>
-              <strong>รวดเร็ว</strong>
-              <span>ไม่ต้องรอนาน</span>
+              <strong>
+                รวดเร็ว
+              </strong>
+
+              <span>
+                ไม่ต้องรอนาน
+              </span>
             </div>
+
           </div>
 
+
           <div class="feature">
+
             <div class="feature-icon">
               ♥
             </div>
 
             <div>
-              <strong>ใส่ใจทุกจาน</strong>
-              <span>คุณภาพที่เราตั้งใจ</span>
+              <strong>
+                ใส่ใจทุกจาน
+              </strong>
+
+              <span>
+                คุณภาพที่เราตั้งใจ
+              </span>
             </div>
+
           </div>
 
         </div>
 
       </div>
+
     </section>
-
-
-    <!-- =========================
-         เมนูแนะนำ
-    ========================== -->
 
     <section class="recommended">
 
       <div class="recommended-container">
+
+        <!-- หัวข้อ -->
 
         <div class="section-heading">
 
@@ -131,9 +161,6 @@ function formatPrice(price: number): string {
 
         </div>
 
-
-        <!-- กรณีมีเมนู -->
-
         <div
           v-if="recommendedMenus.length > 0"
           class="recommended-grid"
@@ -145,11 +172,20 @@ function formatPrice(price: number): string {
             class="recommended-card"
           >
 
+          
+
             <div class="menu-image">
-              <span>
-                MENU
-              </span>
+
+              <img
+                :src="item.getImageUrl()"
+                :alt="item.getName()"
+                loading="lazy"
+              />
+
             </div>
+
+
+            <!-- ข้อมูลเมนู -->
 
             <div class="menu-content">
 
@@ -182,13 +218,11 @@ function formatPrice(price: number): string {
 
         </div>
 
-
-        <!-- กรณียังไม่มีเมนู -->
-
         <div
           v-else
           class="no-menu"
         >
+
           <p>
             ยังไม่มีเมนูแนะนำ
           </p>
@@ -199,15 +233,14 @@ function formatPrice(price: number): string {
           >
             ดูเมนูอาหาร
           </router-link>
+
         </div>
-
-
-        <!-- ดูเมนูทั้งหมด -->
 
         <div
           v-if="recommendedMenus.length > 0"
           class="view-all"
         >
+
           <router-link
             to="/menu"
             class="view-all-button"
@@ -215,16 +248,12 @@ function formatPrice(price: number): string {
             ดูเมนูทั้งหมด
             <span>→</span>
           </router-link>
+
         </div>
 
       </div>
 
     </section>
-
-
-    <!-- =========================
-         ABOUT
-    ========================== -->
 
     <section class="about">
 
@@ -251,6 +280,8 @@ function formatPrice(price: number): string {
 
         <div class="about-cards">
 
+          <!-- Card 1 -->
+
           <div class="about-card">
 
             <div class="card-icon">
@@ -269,6 +300,8 @@ function formatPrice(price: number): string {
           </div>
 
 
+          <!-- Card 2 -->
+
           <div class="about-card">
 
             <div class="card-icon">
@@ -286,6 +319,8 @@ function formatPrice(price: number): string {
 
           </div>
 
+
+          <!-- Card 3 -->
 
           <div class="about-card">
 
@@ -311,10 +346,6 @@ function formatPrice(price: number): string {
     </section>
 
 
-    <!-- =========================
-         CTA
-    ========================== -->
-
     <section class="cta">
 
       <div>
@@ -333,6 +364,7 @@ function formatPrice(price: number): string {
 
       </div>
 
+
       <router-link
         to="/menu"
         class="cta-button"
@@ -349,19 +381,12 @@ function formatPrice(price: number): string {
 
 <style scoped>
 
-/* =========================
-   HOME
-========================= */
 
 .home {
   min-height: calc(100vh - 70px);
+
   background: #faf9f7;
 }
-
-
-/* =========================
-   HERO
-========================= */
 
 .hero {
   position: relative;
@@ -382,8 +407,10 @@ function formatPrice(price: number): string {
     center / cover;
 }
 
+
 .hero-overlay {
   position: absolute;
+
   inset: 0;
 
   background:
@@ -395,12 +422,15 @@ function formatPrice(price: number): string {
     );
 }
 
+
 .hero-content {
   position: relative;
+
   z-index: 1;
 
   max-width: 650px;
 }
+
 
 .badge {
   display: inline-block;
@@ -420,6 +450,7 @@ function formatPrice(price: number): string {
   backdrop-filter: blur(5px);
 }
 
+
 .subtitle {
   margin: 0;
 
@@ -432,6 +463,7 @@ function formatPrice(price: number): string {
   letter-spacing: 4px;
 }
 
+
 .hero h1 {
   margin: 15px 0;
 
@@ -442,9 +474,11 @@ function formatPrice(price: number): string {
   letter-spacing: -1px;
 }
 
+
 .hero h1 span {
   color: #ff8c42;
 }
+
 
 .description {
   max-width: 550px;
@@ -458,11 +492,6 @@ function formatPrice(price: number): string {
   line-height: 1.9;
 }
 
-
-/* =========================
-   HERO BUTTONS
-========================= */
-
 .hero-actions {
   display: flex;
 
@@ -472,6 +501,7 @@ function formatPrice(price: number): string {
 
   margin-top: 30px;
 }
+
 
 .menu-button,
 .order-button {
@@ -499,6 +529,9 @@ function formatPrice(price: number): string {
     box-shadow 0.2s;
 }
 
+
+/* ปุ่มดูเมนู */
+
 .menu-button {
   background: #e85d04;
 
@@ -507,6 +540,7 @@ function formatPrice(price: number): string {
   box-shadow:
     0 8px 20px rgba(232, 93, 4, 0.3);
 }
+
 
 .menu-button:hover {
   background: #d95100;
@@ -517,9 +551,13 @@ function formatPrice(price: number): string {
     0 10px 25px rgba(232, 93, 4, 0.4);
 }
 
+
 .menu-button span {
   font-size: 20px;
 }
+
+
+/* ปุ่มดูตะกร้า */
 
 .order-button {
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -531,16 +569,12 @@ function formatPrice(price: number): string {
   backdrop-filter: blur(5px);
 }
 
+
 .order-button:hover {
   background: rgba(255, 255, 255, 0.18);
 
   transform: translateY(-2px);
 }
-
-
-/* =========================
-   FEATURES
-========================= */
 
 .features {
   display: flex;
@@ -550,6 +584,7 @@ function formatPrice(price: number): string {
   margin-top: 45px;
 }
 
+
 .feature {
   display: flex;
 
@@ -557,6 +592,7 @@ function formatPrice(price: number): string {
 
   gap: 10px;
 }
+
 
 .feature-icon {
   width: 34px;
@@ -575,14 +611,17 @@ function formatPrice(price: number): string {
   font-size: 14px;
 }
 
+
 .feature strong,
 .feature span {
   display: block;
 }
 
+
 .feature strong {
   font-size: 13px;
 }
+
 
 .feature span {
   margin-top: 2px;
@@ -592,25 +631,18 @@ function formatPrice(price: number): string {
   font-size: 11px;
 }
 
-
-/* =========================
-   RECOMMENDED MENU
-========================= */
-
 .recommended {
   padding: 90px 20px;
 
   background: white;
 }
 
+
 .recommended-container {
   max-width: 1100px;
 
   margin: auto;
 }
-
-
-/* หัวข้อ */
 
 .section-heading {
   max-width: 650px;
@@ -619,6 +651,7 @@ function formatPrice(price: number): string {
 
   text-align: center;
 }
+
 
 .section-title {
   margin: 0 0 10px;
@@ -632,6 +665,7 @@ function formatPrice(price: number): string {
   letter-spacing: 4px;
 }
 
+
 .section-heading h2 {
   margin: 0 0 15px;
 
@@ -640,9 +674,11 @@ function formatPrice(price: number): string {
   font-size: 36px;
 }
 
+
 .section-heading h2 span {
   color: #e85d04;
 }
+
 
 .section-heading > p:last-child {
   margin: 0;
@@ -651,19 +687,14 @@ function formatPrice(price: number): string {
 
   line-height: 1.8;
 }
-
-
-/* การ์ดเมนู */
-
 .recommended-grid {
   display: grid;
 
   grid-template-columns:
-    repeat(4, 1fr);
+    repeat(4, minmax(0, 1fr));
 
   gap: 20px;
 }
-
 .recommended-card {
   overflow: hidden;
 
@@ -681,44 +712,45 @@ function formatPrice(price: number): string {
     box-shadow 0.2s;
 }
 
+
 .recommended-card:hover {
   transform: translateY(-6px);
 
   box-shadow:
     0 15px 35px rgba(0, 0, 0, 0.1);
 }
-
-
-/* พื้นที่รูป */
-
 .menu-image {
-  height: 150px;
+  width: 100%;
 
-  display: flex;
+  height: 180px;
 
-  align-items: center;
+  overflow: hidden;
 
-  justify-content: center;
-
-  background:
-    linear-gradient(
-      135deg,
-      #e85d04,
-      #ff9a52
-    );
-
-  color: white;
-
-  font-size: 13px;
-
-  font-weight: bold;
-
-  letter-spacing: 3px;
+  background: #fff1e8;
 }
 
+
+.menu-image img {
+  width: 100%;
+
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition:
+    transform 0.3s ease;
+}
+
+
+.recommended-card:hover .menu-image img {
+  transform: scale(1.05);
+}
 .menu-content {
   padding: 20px;
 }
+
 
 .menu-category {
   margin-bottom: 8px;
@@ -732,6 +764,7 @@ function formatPrice(price: number): string {
   letter-spacing: 1px;
 }
 
+
 .menu-content h3 {
   min-height: 48px;
 
@@ -743,7 +776,6 @@ function formatPrice(price: number): string {
 
   line-height: 1.4;
 }
-
 .menu-bottom {
   display: flex;
 
@@ -756,12 +788,12 @@ function formatPrice(price: number): string {
   margin-top: 18px;
 }
 
+
 .menu-bottom strong {
   color: #e85d04;
 
   font-size: 16px;
 }
-
 .view-menu-button {
   padding: 8px 12px;
 
@@ -782,15 +814,12 @@ function formatPrice(price: number): string {
     color 0.2s;
 }
 
+
 .view-menu-button:hover {
   background: #e85d04;
 
   color: white;
 }
-
-
-/* ดูทั้งหมด */
-
 .view-all {
   display: flex;
 
@@ -798,6 +827,7 @@ function formatPrice(price: number): string {
 
   margin-top: 35px;
 }
+
 
 .view-all-button {
   display: inline-flex;
@@ -827,19 +857,17 @@ function formatPrice(price: number): string {
     color 0.2s;
 }
 
+
 .view-all-button:hover {
   background: #e85d04;
 
   color: white;
 }
 
+
 .view-all-button span {
   font-size: 18px;
 }
-
-
-/* ไม่มีเมนู */
-
 .no-menu {
   padding: 40px;
 
@@ -853,15 +881,15 @@ function formatPrice(price: number): string {
 }
 
 
-/* =========================
-   ABOUT
-========================= */
-
+.no-menu p {
+  margin: 0 0 20px;
+}
 .about {
   padding: 90px 20px;
 
   background: #faf9f7;
 }
+
 
 .about-container {
   max-width: 1100px;
@@ -869,14 +897,16 @@ function formatPrice(price: number): string {
   margin: auto;
 }
 
+
 .about-cards {
   display: grid;
 
   grid-template-columns:
-    repeat(3, 1fr);
+    repeat(3, minmax(0, 1fr));
 
   gap: 22px;
 }
+
 
 .about-card {
   padding: 30px;
@@ -897,12 +927,14 @@ function formatPrice(price: number): string {
     box-shadow 0.2s;
 }
 
+
 .about-card:hover {
   transform: translateY(-5px);
 
   box-shadow:
     0 15px 35px rgba(0, 0, 0, 0.08);
 }
+
 
 .card-icon {
   width: 60px;
@@ -927,6 +959,7 @@ function formatPrice(price: number): string {
   font-weight: bold;
 }
 
+
 .about-card h3 {
   margin: 0 0 10px;
 
@@ -934,6 +967,7 @@ function formatPrice(price: number): string {
 
   font-size: 19px;
 }
+
 
 .about-card p {
   margin: 0;
@@ -944,11 +978,6 @@ function formatPrice(price: number): string {
 
   line-height: 1.7;
 }
-
-
-/* =========================
-   CTA
-========================= */
 
 .cta {
   max-width: 1100px;
@@ -975,6 +1004,7 @@ function formatPrice(price: number): string {
     0 12px 30px rgba(232, 93, 4, 0.2);
 }
 
+
 .cta p {
   margin: 0 0 5px;
 
@@ -987,17 +1017,20 @@ function formatPrice(price: number): string {
   letter-spacing: 3px;
 }
 
+
 .cta h2 {
   margin: 0 0 5px;
 
   font-size: 28px;
 }
 
-.cta span {
+
+.cta > div > span {
   color: #ffe9dc;
 
   font-size: 14px;
 }
+
 
 .cta-button {
   flex-shrink: 0;
@@ -1025,23 +1058,19 @@ function formatPrice(price: number): string {
     background 0.2s;
 }
 
+
 .cta-button:hover {
   background: #fff7f2;
 
   transform: translateY(-2px);
 }
 
+
 .cta-button span {
   color: #e85d04;
 
   font-size: 18px;
 }
-
-
-/* =========================
-   TABLET
-========================= */
-
 @media (max-width: 900px) {
 
   .hero {
@@ -1050,30 +1079,30 @@ function formatPrice(price: number): string {
     padding: 70px 7%;
   }
 
+
   .recommended-grid {
     grid-template-columns:
-      repeat(2, 1fr);
+      repeat(2, minmax(0, 1fr));
   }
+
 
   .about-cards {
     grid-template-columns: 1fr;
   }
 
+
   .about-card {
     padding: 25px;
   }
+
 
   .cta {
     margin-left: 20px;
 
     margin-right: 20px;
   }
+
 }
-
-
-/* =========================
-   MOBILE
-========================= */
 
 @media (max-width: 650px) {
 
@@ -1083,13 +1112,16 @@ function formatPrice(price: number): string {
     padding: 60px 25px;
   }
 
+
   .hero h1 {
     font-size: 42px;
   }
 
+
   .description {
     font-size: 15px;
   }
+
 
   .hero-actions {
     flex-direction: column;
@@ -1097,12 +1129,14 @@ function formatPrice(price: number): string {
     align-items: stretch;
   }
 
+
   .menu-button,
   .order-button {
     width: 100%;
 
     box-sizing: border-box;
   }
+
 
   .features {
     flex-direction: column;
@@ -1112,17 +1146,26 @@ function formatPrice(price: number): string {
     margin-top: 35px;
   }
 
+
   .recommended {
     padding: 65px 20px;
   }
+
 
   .recommended-grid {
     grid-template-columns: 1fr;
   }
 
+
   .section-heading h2 {
     font-size: 29px;
   }
+
+
+  .menu-image {
+    height: 200px;
+  }
+
 
   .cta {
     flex-direction: column;
@@ -1132,6 +1175,7 @@ function formatPrice(price: number): string {
     padding: 30px 25px;
   }
 
+
   .cta-button {
     width: 100%;
 
@@ -1139,7 +1183,8 @@ function formatPrice(price: number): string {
 
     box-sizing: border-box;
   }
-}
 
+}
 </style>
+
 
