@@ -36,10 +36,10 @@ function confirmPayment(): void {
 
   // สร้าง Payment
   const payment = new Payment(
-    Date.now(),
-    currentOrder as any,
-    paymentMethod.value
-  )
+  Date.now(),
+  currentOrder as any,
+  paymentMethod.value
+)
 
   // ชำระเงิน
   payment.pay()

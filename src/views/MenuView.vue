@@ -1,3 +1,4 @@
+```vue
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useMenuStore } from '../stores/menuStore'
@@ -7,13 +8,18 @@ import { MenuItem } from '../models/MenuItem'
 const menuStore = useMenuStore()
 const cartStore = useCartStore()
 
-const foods = computed(() => menuStore.foods)
-const drinks = computed(() => menuStore.drinks)
+// แบ่งเมนูเป็น 2 หมวด
+const menuCategories = computed(() => [
+  { title: 'อาหาร', items: menuStore.foods as MenuItem[] },
+  { title: 'เครื่องดื่ม', items: menuStore.drinks as MenuItem[] }
+])
 
+// เพิ่มสินค้าเข้าตะกร้า
 function addToCart(item: MenuItem): void {
   cartStore.addToCart(item)
 }
 
+// แสดงราคา
 function formatPrice(price: number): string {
   return `${price.toLocaleString()} บาท`
 }
@@ -22,100 +28,60 @@ function formatPrice(price: number): string {
 <template>
   <div class="menu-page">
 
-    <!-- =========================
-         MENU HEADER
-    ========================== -->
+    <!-- ================= HEADER ================= -->
     <header class="menu-header">
-
       <div class="header-content">
-
-        <p class="subtitle">
-          OUR MENU
-        </p>
-
-        <h1>
-          เมนูอาหาร
-        </h1>
-
+        <p class="subtitle">OUR MENU</p>
+        <h1>เมนูอาหาร</h1>
         <p class="description">
           เลือกอาหารและเครื่องดื่มที่คุณชื่นชอบ
         </p>
-
       </div>
 
-      <!-- Cart Summary -->
-      <router-link
-        to="/cart"
-        class="cart-summary"
-      >
-
-        <div class="cart-icon">
-          🛒
-        </div>
+      <router-link to="/cart" class="cart-summary">
+        <div class="cart-icon">🛒</div>
 
         <div class="cart-info">
-
-          <span>
-            ตะกร้า
-          </span>
-
-          <strong>
-            {{ cartStore.totalQuantity }} รายการ
-          </strong>
-
+          <span>ตะกร้า</span>
+          <strong>{{ cartStore.totalQuantity }} รายการ</strong>
         </div>
-
       </router-link>
-
     </header>
 
 
-    <!-- =========================
-         FOOD SECTION
-    ========================== -->
-    <section class="menu-section">
-
+    <!-- ================= MENU ================= -->
+    <section
+      v-for="category in menuCategories"
+      :key="category.title"
+      class="menu-section"
+    >
       <div class="section-header">
-
-        <h2>
-          อาหาร
-        </h2>
-
+        <h2>{{ category.title }}</h2>
         <span class="menu-count">
-          {{ foods.length }} เมนู
+          {{ category.items.length }} เมนู
         </span>
-
       </div>
 
-
       <div class="menu-grid">
-
         <div
-          v-for="item in foods"
+          v-for="item in category.items"
           :key="item.getId()"
           class="menu-card"
         >
-
-          <!-- Image -->
+          <!-- รูปอาหาร -->
           <div class="food-image">
-
             <img
               :src="item.getImageUrl()"
               :alt="item.getName()"
+              loading="lazy"
             />
-
           </div>
 
-
-          <!-- Information -->
+          <!-- ข้อมูลอาหาร -->
           <div class="menu-info">
-
-            <h3>
-              {{ item.getName() }}
-            </h3>
+            <h3>{{ item.getName() }}</h3>
 
             <div class="menu-bottom">
-
               <p class="price">
                 {{ formatPrice(item.getPrice()) }}
               </p>
@@ -127,109 +93,23 @@ function formatPrice(price: number): string {
               >
                 เพิ่มลงตะกร้า
               </button>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </section>
 
 
-    <!-- =========================
-         DRINK SECTION
-    ========================== -->
-    <section class="menu-section">
-
-      <div class="section-header">
-
-        <h2>
-          เครื่องดื่ม
-        </h2>
-
-        <span class="menu-count">
-          {{ drinks.length }} เมนู
-        </span>
-
-      </div>
-
-
-      <div class="menu-grid">
-
-        <div
-          v-for="item in drinks"
-          :key="item.getId()"
-          class="menu-card"
-        >
-
-          <!-- Image -->
-          <div class="food-image">
-
-            <img
-              :src="item.getImageUrl()"
-              :alt="item.getName()"
-            />
-
-          </div>
-
-
-          <!-- Information -->
-          <div class="menu-info">
-
-            <h3>
-              {{ item.getName() }}
-            </h3>
-
-            <div class="menu-bottom">
-
-              <p class="price">
-                {{ formatPrice(item.getPrice()) }}
-              </p>
-
-              <button
-                type="button"
-                class="add-button"
-                @click="addToCart(item)"
-              >
-                เพิ่มลงตะกร้า
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =========================
-         CART SUMMARY
-    ========================== -->
+    <!-- ================= CART SUMMARY ================= -->
     <section class="cart-box">
-
       <div class="cart-box-content">
-
-        <p class="cart-box-label">
-          YOUR CART
-        </p>
-
-        <h2>
-          สรุปตะกร้า
-        </h2>
+        <p class="cart-box-label">YOUR CART</p>
+        <h2>สรุปตะกร้า</h2>
 
         <div class="cart-details">
-
           <p>
             จำนวนทั้งหมด
-            <strong>
-              {{ cartStore.totalQuantity }}
-            </strong>
+            <strong>{{ cartStore.totalQuantity }}</strong>
             รายการ
           </p>
 
@@ -239,19 +119,12 @@ function formatPrice(price: number): string {
               {{ formatPrice(cartStore.totalPrice) }}
             </strong>
           </p>
-
         </div>
-
       </div>
 
-
-      <router-link
-        to="/cart"
-        class="cart-box-button"
-      >
+      <router-link to="/cart" class="cart-box-button">
         ดูตะกร้า
       </router-link>
-
     </section>
 
   </div>
@@ -260,34 +133,26 @@ function formatPrice(price: number): string {
 
 <style scoped>
 
-/* ==================================================
-   PAGE
-================================================== */
+/* ==================== PAGE ==================== */
 
 .menu-page {
   width: 100%;
   min-height: calc(100vh - 70px);
-
   padding: 50px 24px 70px;
-
   background: #f8f8f8;
 }
 
 
-/* ==================================================
-   HEADER
-================================================== */
+/* ==================== HEADER ==================== */
 
 .menu-header {
   width: 100%;
   max-width: 1200px;
-
   margin: 0 auto 50px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 40px;
 }
 
@@ -296,149 +161,105 @@ function formatPrice(price: number): string {
   min-width: 0;
 }
 
-
-/* Small title */
-
 .subtitle {
   margin: 0 0 8px;
-
   color: #e85d04;
-
   font-size: 12px;
   font-weight: bold;
-
   letter-spacing: 3px;
 }
 
-
-/* Main title */
-
 .menu-header h1 {
   margin: 0 0 10px;
-
   color: #222;
-
   font-size: 42px;
   font-weight: 700;
-
   line-height: 1.2;
 }
 
-
-/* Description */
-
 .description {
   margin: 0;
-
   color: #777;
-
   font-size: 15px;
   line-height: 1.6;
 }
 
 
-/* ==================================================
-   CART SUMMARY TOP
-================================================== */
+/* ==================== CART TOP ==================== */
 
 .cart-summary {
   flex-shrink: 0;
 
   display: flex;
   align-items: center;
-
   gap: 12px;
 
   min-width: 155px;
-
   padding: 13px 17px;
 
   border: 1px solid #f1dfd2;
   border-radius: 12px;
 
-  background: #ffffff;
-
+  background: #fff;
   color: #333;
-
   text-decoration: none;
 
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
 
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .cart-summary:hover {
   border-color: #e85d04;
-
   transform: translateY(-2px);
-
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
-
-
-/* Cart icon */
 
 .cart-icon {
   width: 40px;
   height: 40px;
 
-  flex-shrink: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 9px;
+  flex-shrink: 0;
 
+  border-radius: 9px;
   background: #fff1e8;
 
   font-size: 18px;
 }
 
-
-/* Cart text */
+.cart-info span,
+.cart-info strong {
+  display: block;
+}
 
 .cart-info span {
-  display: block;
-
   margin-bottom: 3px;
-
   color: #888;
-
   font-size: 11px;
 }
 
 .cart-info strong {
-  display: block;
-
   color: #e85d04;
-
   font-size: 14px;
 }
 
 
-/* ==================================================
-   MENU SECTION
-================================================== */
+/* ==================== MENU SECTION ==================== */
 
 .menu-section {
   width: 100%;
   max-width: 1200px;
-
   margin: 0 auto 55px;
 }
-
-
-/* Section header */
 
 .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 15px;
 
   margin-bottom: 20px;
@@ -446,25 +267,18 @@ function formatPrice(price: number): string {
 
 .menu-section h2 {
   margin: 0;
-
   color: #222;
-
   font-size: 28px;
   font-weight: 700;
 }
-
-
-/* Number of menus */
 
 .menu-count {
   flex-shrink: 0;
 
   padding: 6px 12px;
-
   border-radius: 20px;
 
   background: #fff1e8;
-
   color: #e85d04;
 
   font-size: 12px;
@@ -472,67 +286,49 @@ function formatPrice(price: number): string {
 }
 
 
-/* ==================================================
-   MENU GRID
-================================================== */
+/* ==================== MENU GRID ==================== */
 
 .menu-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
 }
 
 
-/* ==================================================
-   MENU CARD
-================================================== */
+/* ==================== MENU CARD ==================== */
 
 .menu-card {
   width: 100%;
-
   overflow: hidden;
 
-  border: 1px solid #eeeeee;
+  border: 1px solid #eee;
   border-radius: 16px;
 
-  background: #ffffff;
+  background: #fff;
 
-  box-shadow:
-    0 5px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
 
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+  transition: all 0.25s ease;
 }
 
 .menu-card:hover {
   transform: translateY(-5px);
-
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
 }
 
 
-/* ==================================================
-   FOOD / DRINK IMAGE
-================================================== */
+/* ==================== IMAGE ==================== */
 
 .food-image {
   width: 100%;
   height: 220px;
-
   overflow: hidden;
-
   background: #fff1e8;
 }
 
 .food-image img {
   width: 100%;
   height: 100%;
-
   display: block;
 
   object-fit: cover;
@@ -545,49 +341,33 @@ function formatPrice(price: number): string {
 }
 
 
-/* ==================================================
-   MENU INFORMATION
-================================================== */
+/* ==================== MENU INFO ==================== */
 
 .menu-info {
   padding: 20px;
 }
 
-
-/* Food name */
-
 .menu-info h3 {
   min-height: 28px;
-
   margin: 0 0 18px;
 
   color: #222;
-
   font-size: 19px;
   font-weight: 700;
-
   line-height: 1.5;
 }
-
-
-/* Bottom row */
 
 .menu-bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 15px;
 }
-
-
-/* Price */
 
 .price {
   margin: 0;
 
   color: #e85d04;
-
   font-size: 18px;
   font-weight: bold;
 
@@ -595,7 +375,7 @@ function formatPrice(price: number): string {
 }
 
 
-/* Add button */
+/* ==================== ADD BUTTON ==================== */
 
 .add-button {
   flex-shrink: 0;
@@ -606,24 +386,19 @@ function formatPrice(price: number): string {
   border-radius: 8px;
 
   background: #e85d04;
-
-  color: #ffffff;
+  color: #fff;
 
   cursor: pointer;
-
   font-family: inherit;
 
   font-size: 13px;
   font-weight: bold;
 
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .add-button:hover {
   background: #d94f00;
-
   transform: translateY(-1px);
 }
 
@@ -632,22 +407,18 @@ function formatPrice(price: number): string {
 }
 
 
-/* ==================================================
-   CART BOX
-================================================== */
+/* ==================== CART BOTTOM ==================== */
 
 .cart-box {
   width: 100%;
   max-width: 1200px;
 
   margin: 10px auto 0;
-
   padding: 25px 28px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 25px;
 
   border: 1px solid #f5d7c1;
@@ -660,38 +431,25 @@ function formatPrice(price: number): string {
   min-width: 0;
 }
 
-
-/* Cart label */
-
 .cart-box-label {
   margin: 0 0 5px;
 
   color: #e85d04;
-
   font-size: 11px;
   font-weight: bold;
-
   letter-spacing: 2px;
 }
-
-
-/* Cart title */
 
 .cart-box h2 {
   margin: 0 0 10px;
 
   color: #222;
-
   font-size: 23px;
 }
-
-
-/* Cart details */
 
 .cart-details {
   display: flex;
   flex-wrap: wrap;
-
   gap: 20px;
 }
 
@@ -699,19 +457,14 @@ function formatPrice(price: number): string {
   margin: 0;
 
   color: #666;
-
   font-size: 14px;
   line-height: 1.5;
 }
 
 .cart-box strong {
   color: #e85d04;
-
   font-weight: bold;
 }
-
-
-/* Cart button */
 
 .cart-box-button {
   flex-shrink: 0;
@@ -721,34 +474,26 @@ function formatPrice(price: number): string {
   border-radius: 8px;
 
   background: #e85d04;
-
-  color: #ffffff;
+  color: #fff;
 
   text-decoration: none;
-
   font-size: 14px;
   font-weight: bold;
 
   white-space: nowrap;
 
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .cart-box-button:hover {
   background: #d94f00;
-
   transform: translateY(-2px);
 }
 
 
-/* ==================================================
-   LARGE TABLET
-================================================== */
+/* ==================== TABLET ==================== */
 
 @media (max-width: 1000px) {
-
   .menu-page {
     padding: 40px 20px 60px;
   }
@@ -762,33 +507,22 @@ function formatPrice(price: number): string {
   }
 
   .menu-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 }
 
 
-/* ==================================================
-   TABLET / MOBILE
-================================================== */
+/* ==================== MOBILE ==================== */
 
 @media (max-width: 700px) {
-
   .menu-page {
     padding: 35px 16px 50px;
   }
 
-
-  /* Header */
-
   .menu-header {
     align-items: stretch;
-
     flex-direction: column;
-
     gap: 22px;
-
     margin-bottom: 40px;
   }
 
@@ -800,15 +534,9 @@ function formatPrice(price: number): string {
     font-size: 14px;
   }
 
-
-  /* Cart */
-
   .cart-summary {
     width: 100%;
   }
-
-
-  /* Section */
 
   .menu-section {
     margin-bottom: 42px;
@@ -818,62 +546,42 @@ function formatPrice(price: number): string {
     font-size: 25px;
   }
 
-
-  /* Grid */
-
   .menu-grid {
     grid-template-columns: 1fr;
-
     gap: 18px;
   }
-
-
-  /* Card */
 
   .food-image {
     height: 180px;
   }
 
-
-  /* Cart box */
-
   .cart-box {
     align-items: stretch;
-
     flex-direction: column;
-
     padding: 22px;
   }
 
   .cart-details {
     flex-direction: column;
-
     gap: 5px;
   }
 
   .cart-box-button {
     width: 100%;
-
     text-align: center;
   }
-
 }
 
 
-/* ==================================================
-   SMALL MOBILE
-================================================== */
+/* ==================== SMALL MOBILE ==================== */
 
 @media (max-width: 450px) {
-
   .menu-page {
     padding: 28px 12px 45px;
   }
 
-
   .subtitle {
     font-size: 11px;
-
     letter-spacing: 2px;
   }
 
@@ -885,51 +593,40 @@ function formatPrice(price: number): string {
     font-size: 13px;
   }
 
-
   .menu-section h2 {
     font-size: 23px;
   }
 
-
   .menu-count {
     padding: 5px 9px;
-
     font-size: 11px;
   }
-
 
   .food-image {
     height: 165px;
   }
-
 
   .menu-info {
     padding: 16px;
   }
 
   .menu-info h3 {
-    font-size: 17px;
-
     margin-bottom: 15px;
+    font-size: 17px;
   }
-
 
   .menu-bottom {
     gap: 10px;
   }
 
-
   .price {
     font-size: 16px;
   }
 
-
   .add-button {
     padding: 9px 11px;
-
     font-size: 12px;
   }
-
 
   .cart-box {
     padding: 18px;
@@ -938,6 +635,5 @@ function formatPrice(price: number): string {
   .cart-box h2 {
     font-size: 21px;
   }
-
 }
 </style>
