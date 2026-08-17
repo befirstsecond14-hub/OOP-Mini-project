@@ -1,12 +1,16 @@
 import { Order } from './Order'
 
+// 1. แยก Type ออกมาเพื่อให้เรียกใช้ซ้ำได้ง่าย
+export type PaymentStatus = 'ยังไม่ชำระ' | 'ชำระแล้ว'
+export type PaymentMethod = 'เงินสด' | 'โอนเงิน' | 'บัตรเครดิต'
+
 export class Payment {
-  private status: 'ยังไม่ชำระ' | 'ชำระแล้ว' = 'ยังไม่ชำระ'
+  private status: PaymentStatus = 'ยังไม่ชำระ'
 
   constructor(
     private id: number,
     private order: Order,
-    private method: 'เงินสด' | 'โอนเงิน' | 'บัตรเครดิต'
+    private method: PaymentMethod
   ) {}
 
   getId(): number {
@@ -17,7 +21,8 @@ export class Payment {
     return this.order
   }
 
-  getMethod(): string {
+  // 2. ปรับ Return Type ให้ตรงกับ Type ที่เราสร้างไว้
+  getMethod(): PaymentMethod {
     return this.method
   }
 
@@ -25,11 +30,14 @@ export class Payment {
     return this.order.getTotal()
   }
 
-  getStatus(): string {
+  getStatus(): PaymentStatus {
     return this.status
   }
 
   pay(): void {
     this.status = 'ชำระแล้ว'
+    
+    // 3. (ทางเลือก) อัปเดตสถานะของ Order เมื่อชำระเงินสำเร็จ
+    // this.order.markAsPaid() 
   }
 }

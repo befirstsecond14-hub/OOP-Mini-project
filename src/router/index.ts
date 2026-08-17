@@ -1,14 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomeView from '../views/HomeView.vue'
-import MenuView from '../views/MenuView.vue'
-import CartView from '../views/CartView.vue'
-import CheckoutView from '../views/CheckoutView.vue'
-import OrderView from '../views/OrderView.vue'
-import PaymentView from '../views/PaymentView.vue'
-import AdminLoginView from '../views/AdminLoginView.vue'
-import AdminOrderView from '../views/AdminOrderView.vue'
-
 const router = createRouter({
   history: createWebHistory(),
 
@@ -16,52 +7,45 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      // ใช้ Lazy Loading ดึงไฟล์เมื่อมีการเข้าหน้านี้
+      component: () => import('../views/HomeView.vue')
     },
-
     {
       path: '/menu',
       name: 'menu',
-      component: MenuView
+      component: () => import('../views/MenuView.vue')
     },
-
     {
       path: '/cart',
       name: 'cart',
-      component: CartView
+      component: () => import('../views/CartView.vue')
     },
-
     {
       path: '/checkout',
       name: 'checkout',
-      component: CheckoutView
+      component: () => import('../views/CheckoutView.vue')
     },
-
     {
       path: '/payment',
       name: 'payment',
-      component: PaymentView
+      component: () => import('../views/PaymentView.vue')
     },
-
     {
       path: '/order',
       name: 'order',
-      component: OrderView
+      component: () => import('../views/OrderView.vue')
     },
-
     // หน้า Login ของ Admin
     {
       path: '/admin-login',
       name: 'admin-login',
-      component: AdminLoginView
+      component: () => import('../views/AdminLoginView.vue')
     },
-
     // หน้าจัดการออเดอร์
     {
       path: '/admin-order',
       name: 'admin-order',
-      component: AdminOrderView,
-
+      component: () => import('../views/AdminOrderView.vue'),
       // ต้อง Login ก่อน
       meta: {
         requiresAdmin: true
@@ -70,23 +54,16 @@ const router = createRouter({
   ]
 })
 
-// ตรวจสอบก่อนเข้าแต่ละหน้า
+// ตรวจสอบก่อนเข้าแต่ละหน้า (Navigation Guard)
 router.beforeEach((to) => {
-
   if (to.meta.requiresAdmin) {
-
-    const isAdminLoggedIn =
-      sessionStorage.getItem('adminLoggedIn') === 'true'
+    const isAdminLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true'
 
     if (!isAdminLoggedIn) {
-      return {
-        name: 'admin-login'
-      }
+      return { name: 'admin-login' }
     }
   }
-
   return true
 })
 
 export default router
-

@@ -1,28 +1,13 @@
 export class User {
   constructor(
-    private id: number,
-    private name: string,
-    private email: string,
-    private role: 'customer' | 'admin' = 'customer'
+    public readonly id: number,
+    public readonly name: string,
+    public readonly email: string,
+    public readonly role: 'customer' | 'admin' = 'customer'
   ) {}
 
-  getId(): number {
-    return this.id
-  }
-
-  getName(): string {
-    return this.name
-  }
-
-  getEmail(): string {
-    return this.email
-  }
-
-  getRole(): string {
-    return this.role
-  }
-
-  isAdmin(): boolean {
-    return this.role === 'admin'
+  // ใช้ Native Getter สำหรับเช็คสถานะ admin
+  get isAdmin(): boolean {
+    return this.role === 'admin';
   }
 }
