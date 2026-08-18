@@ -1,7 +1,3 @@
-//บัญชีทดลองตอนนี้คือ
-
-Username: admin
-Password: 1234//
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -15,17 +11,13 @@ const errorMessage = ref('')
 function login(): void {
   errorMessage.value = ''
 
-  // ข้อมูลสำหรับ Admin
+  // ข้อมูลสำหรับ Admin (บัญชีทดลอง)
   const adminUsername = 'admin'
   const adminPassword = '1234'
 
-  if (
-    username.value === adminUsername &&
-    password.value === adminPassword
-  ) {
+  if (username.value === adminUsername && password.value === adminPassword) {
     // จำสถานะว่า Admin Login แล้ว
     sessionStorage.setItem('adminLoggedIn', 'true')
-
     // เข้าไปหน้าจัดการออเดอร์
     router.push('/admin-order')
   } else {
@@ -40,32 +32,17 @@ function goToHome(): void {
 
 <template>
   <main class="login-page">
-
     <section class="login-card">
 
-      <div class="login-logo">
-        R
-      </div>
-
-      <p class="subtitle">
-        ADMIN
-      </p>
-
-      <h1>
-        เข้าสู่ระบบ Admin
-      </h1>
-
-      <p class="description">
-        กรุณาเข้าสู่ระบบเพื่อจัดการออเดอร์
-      </p>
+      <div class="login-logo">R</div>
+      <p class="subtitle">ADMIN</p>
+      <h1>เข้าสู่ระบบ Admin</h1>
+      <p class="description">กรุณาเข้าสู่ระบบเพื่อจัดการออเดอร์</p>
 
       <form @submit.prevent="login">
-
+        
         <div class="form-group">
-          <label>
-            ชื่อผู้ใช้
-          </label>
-
+          <label>ชื่อผู้ใช้</label>
           <input
             v-model="username"
             type="text"
@@ -75,10 +52,7 @@ function goToHome(): void {
         </div>
 
         <div class="form-group">
-          <label>
-            รหัสผ่าน
-          </label>
-
+          <label>รหัสผ่าน</label>
           <input
             v-model="password"
             type="password"
@@ -87,31 +61,21 @@ function goToHome(): void {
           />
         </div>
 
-        <p
-          v-if="errorMessage"
-          class="error-message"
-        >
+        <p v-if="errorMessage" class="error-message">
           {{ errorMessage }}
         </p>
 
-        <button
-          type="submit"
-          class="login-button"
-        >
+        <button type="submit" class="login-button">
           เข้าสู่ระบบ
         </button>
 
       </form>
 
-      <button
-        class="back-button"
-        @click="goToHome"
-      >
+      <button class="back-button" @click="goToHome">
         กลับหน้าแรก
       </button>
 
     </section>
-
   </main>
 </template>
 
@@ -159,30 +123,12 @@ function goToHome(): void {
   letter-spacing: 3px;
 }
 
-h1 {
-  margin: 0 0 10px;
-  font-size: 30px;
-}
+h1 { margin: 0 0 10px; font-size: 30px; }
+.description { margin: 0 0 30px; color: #777; }
 
-.description {
-  margin: 0 0 30px;
-  color: #777;
-}
-
-form {
-  text-align: left;
-}
-
-.form-group {
-  margin-bottom: 18px;
-}
-
-label {
-  display: block;
-  margin-bottom: 7px;
-  color: #444;
-  font-weight: bold;
-}
+form { text-align: left; }
+.form-group { margin-bottom: 18px; }
+label { display: block; margin-bottom: 7px; color: #444; font-weight: bold; }
 
 input {
   width: 100%;
@@ -193,10 +139,7 @@ input {
   outline: none;
   font-size: 15px;
 }
-
-input:focus {
-  border-color: #e85d04;
-}
+input:focus { border-color: #e85d04; }
 
 .error-message {
   margin: 5px 0 15px;
@@ -215,10 +158,7 @@ input:focus {
   font-weight: bold;
   cursor: pointer;
 }
-
-.login-button:hover {
-  background: #d95000;
-}
+.login-button:hover { background: #d95000; }
 
 .back-button {
   width: 100%;
@@ -231,15 +171,9 @@ input:focus {
   font-size: 15px;
   cursor: pointer;
 }
-
-.back-button:hover {
-  background: #f8f8f8;
-}
+.back-button:hover { background: #f8f8f8; }
 
 @media (max-width: 500px) {
-  .login-card {
-    padding: 30px 20px;
-  }
+  .login-card { padding: 30px 20px; }
 }
 </style>
-
