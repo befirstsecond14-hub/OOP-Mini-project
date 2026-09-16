@@ -1,4 +1,3 @@
-```vue
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -16,7 +15,10 @@ const tableNumber = ref(1)
 const diningOption = ref<'ทานที่ร้าน' | 'กลับบ้าน'>('ทานที่ร้าน')
 
 const totalPrice = computed(() =>
-  cartStore.items.reduce((total, item) => total + item.getSubtotal(), 0)
+  cartStore.items.reduce(
+    (total, item) => total + item.getSubtotal(),
+    0
+  )
 )
 
 function submitOrder(): void {
@@ -38,12 +40,29 @@ function submitOrder(): void {
 
   cartStore.items.forEach(item => {
     newOrder.addItem(
-      new OrderItem(item.getMenuItem(), item.getQuantity())
+      new OrderItem(
+        item.getMenuItem(),
+        item.getQuantity()
+      )
     )
   })
 
   orderStore.setOrder(newOrder)
   router.push('/payment')
+}
+
+function selectDiningOption(
+  option: 'ทานที่ร้าน' | 'กลับบ้าน'
+): void {
+  diningOption.value = option
+
+  if (option === 'กลับบ้าน') {
+    tableNumber.value = 0
+  }
+
+  if (option === 'ทานที่ร้าน' && tableNumber.value === 0) {
+    tableNumber.value = 1
+  }
 }
 
 function goBack(): void {
@@ -55,23 +74,26 @@ function goBack(): void {
   <main class="checkout-page">
     <section class="checkout-card">
 
-      <!-- HEADER -->
       <header class="checkout-header">
         <p class="section-title">CHECKOUT</p>
+
         <h1>ยืนยันการสั่งซื้อ</h1>
+
         <p class="checkout-description">
           กรุณาตรวจสอบข้อมูลและรายการอาหารก่อนยืนยัน
         </p>
       </header>
 
-      <!-- CUSTOMER INFO -->
       <section class="form-section">
         <div class="section-heading">
           <h2>ข้อมูลการสั่งซื้อ</h2>
         </div>
 
         <div class="form-group">
-          <label for="customer-name">ชื่อผู้สั่งซื้อ</label>
+          <label for="customer-name">
+            ชื่อผู้สั่งซื้อ
+          </label>
+
           <input
             id="customer-name"
             v-model="customerName"
@@ -80,7 +102,10 @@ function goBack(): void {
           />
         </div>
 
-        <div class="form-group">
+        <div
+          v-if="diningOption === 'ทานที่ร้าน'"
+          class="form-group"
+        >
           <label>เลขโต๊ะ</label>
 
           <div class="table-options">
@@ -102,30 +127,42 @@ function goBack(): void {
           <div class="dining-options">
             <button
               type="button"
-              :class="{ active: diningOption === 'ทานที่ร้าน' }"
-              @click="diningOption = 'ทานที่ร้าน'"
+              :class="{
+                active: diningOption === 'ทานที่ร้าน'
+              }"
+              @click="
+                selectDiningOption('ทานที่ร้าน')
+              "
             >
               <strong>ทานที่ร้าน</strong>
+
               <span>รับประทานที่ร้าน</span>
             </button>
 
             <button
               type="button"
-              :class="{ active: diningOption === 'กลับบ้าน' }"
-              @click="diningOption = 'กลับบ้าน'"
+              :class="{
+                active: diningOption === 'กลับบ้าน'
+              }"
+              @click="
+                selectDiningOption('กลับบ้าน')
+              "
             >
               <strong>กลับบ้าน</strong>
+
               <span>รับอาหารกลับบ้าน</span>
             </button>
           </div>
         </div>
       </section>
 
-      <!-- ORDER ITEMS -->
       <section class="order-items">
         <div class="section-heading">
           <h2>รายการอาหาร</h2>
-          <span>{{ cartStore.totalQuantity }} รายการ</span>
+
+          <span>
+            {{ cartStore.totalQuantity }} รายการ
+          </span>
         </div>
 
         <div class="order-list">
@@ -135,31 +172,41 @@ function goBack(): void {
             class="order-item"
           >
             <div class="order-item-info">
-              <strong>{{ item.getMenuItem().getName() }}</strong>
-              <p>{{ item.getQuantity() }} ชิ้น</p>
+              <strong>
+                {{ item.getMenuItem().getName() }}
+              </strong>
+
+              <p>
+                {{ item.getQuantity() }} ชิ้น
+              </p>
             </div>
 
             <strong class="order-item-price">
-              {{ item.getSubtotal().toLocaleString() }} บาท
+              {{ item.getSubtotal().toLocaleString() }}
+              บาท
             </strong>
           </div>
         </div>
       </section>
 
-      <!-- TOTAL -->
       <section class="total-section">
         <div class="total-row">
           <span>จำนวนทั้งหมด</span>
-          <strong>{{ cartStore.totalQuantity }} รายการ</strong>
+
+          <strong>
+            {{ cartStore.totalQuantity }} รายการ
+          </strong>
         </div>
 
         <div class="total-row final-total">
           <span>ยอดรวมทั้งหมด</span>
-          <strong>{{ totalPrice.toLocaleString() }} บาท</strong>
+
+          <strong>
+            {{ totalPrice.toLocaleString() }} บาท
+          </strong>
         </div>
       </section>
 
-      <!-- ACTIONS -->
       <div class="checkout-actions">
         <button
           type="button"
@@ -183,7 +230,6 @@ function goBack(): void {
 </template>
 
 <style scoped>
-/* PAGE */
 .checkout-page {
   width: 100%;
   min-height: calc(100vh - 70px);
@@ -205,7 +251,6 @@ function goBack(): void {
   box-shadow: 0 8px 30px rgba(0, 0, 0, .06);
 }
 
-/* HEADER */
 .checkout-header {
   margin-bottom: 35px;
   text-align: center;
@@ -232,7 +277,6 @@ function goBack(): void {
   line-height: 1.6;
 }
 
-/* SECTION */
 .form-section {
   margin-bottom: 35px;
 }
@@ -260,7 +304,6 @@ function goBack(): void {
   font-weight: 700;
 }
 
-/* FORM */
 .form-group {
   margin-bottom: 24px;
 }
@@ -293,7 +336,6 @@ function goBack(): void {
   box-shadow: 0 0 0 3px rgba(232, 93, 4, .1);
 }
 
-/* TABLE */
 .table-options {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -322,7 +364,6 @@ function goBack(): void {
   color: #fff;
 }
 
-/* DINING */
 .dining-options {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -368,7 +409,6 @@ function goBack(): void {
   font-size: 12px;
 }
 
-/* ORDER ITEMS */
 .order-items {
   margin-bottom: 30px;
 }
@@ -404,7 +444,6 @@ function goBack(): void {
   font-size: 14px;
 }
 
-/* TOTAL */
 .total-section {
   padding-top: 5px;
   margin-bottom: 30px;
@@ -434,7 +473,6 @@ function goBack(): void {
   color: #e85d04;
 }
 
-/* BUTTONS */
 .checkout-actions {
   display: grid;
   grid-template-columns: .7fr 1.5fr;
@@ -471,7 +509,6 @@ function goBack(): void {
   background: #d94f00;
 }
 
-/* RESPONSIVE */
 @media (max-width: 700px) {
   .checkout-page {
     padding: 30px 16px 50px;

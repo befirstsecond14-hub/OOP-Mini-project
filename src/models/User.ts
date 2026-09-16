@@ -1,13 +1,43 @@
+export type UserRole = 'customer' | 'admin'
+
 export class User {
   constructor(
-    public readonly id: number,
-    public readonly name: string,
-    public readonly email: string,
-    public readonly role: 'customer' | 'admin' = 'customer'
+    private readonly id: number,
+    private name: string,
+    private email: string,
+    private password: string,
+    private readonly role: UserRole = 'customer'
   ) {}
 
-  // ใช้ Native Getter สำหรับเช็คสถานะ admin
+  getId(): number {
+    return this.id
+  }
+
+  getName(): string {
+    return this.name
+  }
+
+  getEmail(): string {
+    return this.email
+  }
+
+  getRole(): UserRole {
+    return this.role
+  }
+
+  checkPassword(password: string): boolean {
+    return this.password === password
+  }
+
+  setName(name: string): void {
+    this.name = name
+  }
+
+  setPassword(password: string): void {
+    this.password = password
+  }
+
   get isAdmin(): boolean {
-    return this.role === 'admin';
+    return this.role === 'admin'
   }
 }

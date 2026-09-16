@@ -1,6 +1,5 @@
-```vue
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useMenuStore } from '../stores/menuStore'
 import { useCartStore } from '../stores/cartStore'
 import { MenuItem } from '../models/MenuItem'
@@ -8,18 +7,35 @@ import { MenuItem } from '../models/MenuItem'
 const menuStore = useMenuStore()
 const cartStore = useCartStore()
 
-// แบ่งเมนูเป็น 2 หมวด
-const menuCategories = computed(() => [
-  { title: 'อาหาร', items: menuStore.foods as MenuItem[] },
-  { title: 'เครื่องดื่ม', items: menuStore.drinks as MenuItem[] }
-])
+const searchText = ref('')
 
-// เพิ่มสินค้าเข้าตะกร้า
+const menuCategories = computed(() => {
+  const keyword = searchText.value.trim().toLowerCase()
+
+  const filterItems = (items: MenuItem[]) => {
+    if (!keyword) return items
+
+    return items.filter(item =>
+      item.getName().toLowerCase().includes(keyword)
+    )
+  }
+
+  return [
+    {
+      title: 'อาหาร',
+      items: filterItems(menuStore.foods as MenuItem[])
+    },
+    {
+      title: 'เครื่องดื่ม',
+      items: filterItems(menuStore.drinks as MenuItem[])
+    }
+  ]
+})
+
 function addToCart(item: MenuItem): void {
   cartStore.addToCart(item)
 }
 
-// แสดงราคา
 function formatPrice(price: number): string {
   return `${price.toLocaleString()} บาท`
 }
@@ -28,11 +44,12 @@ function formatPrice(price: number): string {
 <template>
   <div class="menu-page">
 
-    <!-- ================= HEADER ================= -->
     <header class="menu-header">
       <div class="header-content">
         <p class="subtitle">OUR MENU</p>
+
         <h1>เมนูอาหาร</h1>
+
         <p class="description">
           เลือกอาหารและเครื่องดื่มที่คุณชื่นชอบ
         </p>
@@ -43,32 +60,62 @@ function formatPrice(price: number): string {
 
         <div class="cart-info">
           <span>ตะกร้า</span>
-          <strong>{{ cartStore.totalQuantity }} รายการ</strong>
+          <strong>
+            {{ cartStore.totalQuantity }} รายการ
+          </strong>
         </div>
       </router-link>
     </header>
 
 
-    <!-- ================= MENU ================= -->
+    <!-- SEARCH -->
+
+    <div class="search-box">
+      <input
+        v-model="searchText"
+        type="text"
+        placeholder="ค้นหาอาหารหรือเครื่องดื่ม..."
+      />
+
+      <button
+        v-if="searchText"
+        type="button"
+        class="clear-search"
+        @click="searchText = ''"
+      >
+        ล้าง
+      </button>
+    </div>
+
+
+    <!-- MENU -->
+
     <section
       v-for="category in menuCategories"
       :key="category.title"
       class="menu-section"
     >
+
       <div class="section-header">
         <h2>{{ category.title }}</h2>
+
         <span class="menu-count">
           {{ category.items.length }} เมนู
         </span>
       </div>
 
-      <div class="menu-grid">
+
+      <div
+        v-if="category.items.length"
+        class="menu-grid"
+      >
+
         <div
           v-for="item in category.items"
           :key="item.getId()"
           class="menu-card"
         >
-          <!-- รูปอาหาร -->
+
           <div class="food-image">
             <img
               :src="item.getImageUrl()"
@@ -77,11 +124,15 @@ function formatPrice(price: number): string {
             />
           </div>
 
-          <!-- ข้อมูลอาหาร -->
+
           <div class="menu-info">
-            <h3>{{ item.getName() }}</h3>
+
+            <h3>
+              {{ item.getName() }}
+            </h3>
 
             <div class="menu-bottom">
+
               <p class="price">
                 {{ formatPrice(item.getPrice()) }}
               </p>
@@ -93,23 +144,45 @@ function formatPrice(price: number): string {
               >
                 เพิ่มลงตะกร้า
               </button>
+
             </div>
+
           </div>
+
         </div>
+
       </div>
+
+
+      <p
+        v-else-if="searchText"
+        class="no-result"
+      >
+        ไม่พบเมนูที่ค้นหา
+      </p>
+
     </section>
 
 
-    <!-- ================= CART SUMMARY ================= -->
+    <!-- CART SUMMARY -->
+
     <section class="cart-box">
+
       <div class="cart-box-content">
-        <p class="cart-box-label">YOUR CART</p>
+
+        <p class="cart-box-label">
+          YOUR CART
+        </p>
+
         <h2>สรุปตะกร้า</h2>
 
         <div class="cart-details">
+
           <p>
             จำนวนทั้งหมด
-            <strong>{{ cartStore.totalQuantity }}</strong>
+            <strong>
+              {{ cartStore.totalQuantity }}
+            </strong>
             รายการ
           </p>
 
@@ -119,12 +192,18 @@ function formatPrice(price: number): string {
               {{ formatPrice(cartStore.totalPrice) }}
             </strong>
           </p>
+
         </div>
+
       </div>
 
-      <router-link to="/cart" class="cart-box-button">
+      <router-link
+        to="/cart"
+        class="cart-box-button"
+      >
         ดูตะกร้า
       </router-link>
+
     </section>
 
   </div>
@@ -148,7 +227,7 @@ function formatPrice(price: number): string {
 .menu-header {
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto 50px;
+  margin: 0 auto 35px;
 
   display: flex;
   align-items: center;
@@ -248,6 +327,75 @@ function formatPrice(price: number): string {
 }
 
 
+/* ==================== SEARCH ==================== */
+
+.search-box {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 45px;
+
+  display: flex;
+  gap: 10px;
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+
+  padding: 13px 16px;
+
+  border: 1px solid #ddd;
+  border-radius: 10px;
+
+  background: #fff;
+  color: #333;
+
+  font-family: inherit;
+  font-size: 15px;
+
+  outline: none;
+
+  transition: border-color 0.2s ease;
+}
+
+.search-box input:focus {
+  border-color: #e85d04;
+}
+
+.clear-search {
+  padding: 0 18px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #fff1e8;
+  color: #e85d04;
+
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: bold;
+
+  transition: all 0.2s ease;
+}
+
+.clear-search:hover {
+  background: #e85d04;
+  color: #fff;
+}
+
+.no-result {
+  margin: 0;
+  padding: 30px;
+
+  border-radius: 12px;
+
+  background: #fff;
+  color: #777;
+
+  text-align: center;
+}
+
+
 /* ==================== MENU SECTION ==================== */
 
 .menu-section {
@@ -323,6 +471,7 @@ function formatPrice(price: number): string {
   width: 100%;
   height: 220px;
   overflow: hidden;
+
   background: #fff1e8;
 }
 
@@ -499,7 +648,7 @@ function formatPrice(price: number): string {
   }
 
   .menu-header {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
   }
 
   .menu-header h1 {
@@ -523,7 +672,7 @@ function formatPrice(price: number): string {
     align-items: stretch;
     flex-direction: column;
     gap: 22px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
   }
 
   .menu-header h1 {
@@ -536,6 +685,18 @@ function formatPrice(price: number): string {
 
   .cart-summary {
     width: 100%;
+  }
+
+  .search-box {
+    margin-bottom: 30px;
+  }
+
+  .search-box input {
+    font-size: 14px;
+  }
+
+  .clear-search {
+    padding: 0 14px;
   }
 
   .menu-section {
@@ -636,4 +797,5 @@ function formatPrice(price: number): string {
     font-size: 21px;
   }
 }
+
 </style>

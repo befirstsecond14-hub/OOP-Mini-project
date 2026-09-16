@@ -1,126 +1,308 @@
 <template>
   <nav class="navbar">
 
-    <!-- โลโก้ (ด้านซ้าย) -->
     <router-link to="/" class="logo">
       <div class="logo-icon">R</div>
-      <span>My Restaurant</span>
+
+      <span class="logo-text">
+        My Restaurant
+      </span>
     </router-link>
 
-    <!-- ลิงก์เมนู (ตรงกลาง) -->
-    <div class="nav-links">
-      <router-link to="/">หน้าแรก</router-link>
-      <router-link to="/menu">เมนูอาหาร</router-link>
-      <router-link to="/admin-login">Admin</router-link>
+    <div
+      class="nav-links"
+      :class="{ 'mobile-open': isMenuOpen }"
+    >
+
+      <router-link
+        to="/"
+        @click="closeMenu"
+      >
+        หน้าแรก
+      </router-link>
+
+      <router-link
+        to="/menu"
+        @click="closeMenu"
+      >
+        เมนูอาหาร
+      </router-link>
+
+      <router-link
+        to="/order-history"
+        @click="closeMenu"
+      >
+        ประวัติการสั่งซื้อ
+      </router-link>
+
+      <router-link
+        to="/member-login"
+        @click="closeMenu"
+      >
+        สมาชิก
+      </router-link>
+
+      <router-link
+        to="/admin-login"
+        class="mobile-admin"
+        @click="closeMenu"
+      >
+        Admin
+      </router-link>
+
     </div>
 
-    <!-- พื้นที่ว่าง (ด้านขวาเพื่อรักษาสมดุล) -->
-    <div class="navbar-space"></div>
+    <div class="nav-admin">
+      <router-link
+        to="/admin-login"
+        class="btn-admin-login"
+      >
+        Admin
+      </router-link>
+    </div>
+
+    <button
+      type="button"
+      class="menu-toggle"
+      :class="{ active: isMenuOpen }"
+      @click="toggleMenu"
+      aria-label="Toggle menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
 
   </nav>
 </template>
 
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const isMenuOpen = ref(false)
+
+function toggleMenu(): void {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
+function closeMenu(): void {
+  isMenuOpen.value = false
+}
+</script>
+
 <style scoped>
-/* =========================
-   LAYOUT
-========================= */
 .navbar {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   width: 100%;
   height: 70px;
-  padding: 0 7%;
+  padding: 0 5%;
   display: flex;
   align-items: center;
-  background: white;
-  border-bottom: 1px solid #eee;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.04);
   box-sizing: border-box;
 }
 
-/* =========================
-   LOGO
-========================= */
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: #222;
-  font-size: 20px;
-  font-weight: bold;
+  gap: 12px;
   text-decoration: none;
   flex-shrink: 0;
 }
 
 .logo-icon {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  background: #e85d04;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    #ff7b00,
+    #e85d04
+  );
   color: white;
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow:
+    0 4px 10px rgba(232, 93, 4, 0.2);
 }
 
-/* =========================
-   MENU (ตรงกลาง)
-========================= */
+.logo-text {
+  color: #1a1a1a;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
 .nav-links {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
-  gap: 35px;
+  gap: 32px;
 }
 
 .nav-links a {
-  color: #555;
-  font-size: 14px;
+  position: relative;
+  color: #4a4a4a;
+  font-size: 15px;
   font-weight: 500;
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.2s ease;
+  padding: 8px 0;
+  transition: color 0.3s ease;
 }
 
-.nav-links a:hover {
-  color: #e85d04;
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #e85d04;
+  transition: width 0.3s ease;
 }
 
-/* Vue Router จะใส่คลาสนี้ให้อัตโนมัติเมื่อเราอยู่หน้าเมนูนั้นๆ */
+.nav-links a:hover::after,
+.nav-links a.router-link-active::after {
+  width: 100%;
+}
+
+.nav-links a:hover,
 .nav-links a.router-link-active {
   color: #e85d04;
-  font-weight: bold;
+  font-weight: 600;
 }
 
-/* =========================
-   พื้นที่ด้านขวา
-========================= */
-.navbar-space {
-  width: 40px;
+.nav-admin {
+  display: flex;
+  align-items: center;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+.btn-admin-login {
+  color: #666;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.btn-admin-login:hover {
+  color: #e85d04;
+}
+
+.mobile-admin {
+  display: none;
+}
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #333;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 0 3%;
+  }
+
+  .nav-links {
+    gap: 20px;
+  }
+}
+
 @media (max-width: 768px) {
-  .navbar { padding: 0 5%; }
-  .nav-links { gap: 22px; }
-  .nav-links a { font-size: 13px; }
-}
+  .navbar {
+    height: 64px;
+    padding: 0 20px;
+  }
 
-@media (max-width: 600px) {
-  .navbar { height: 64px; padding: 0 4%; }
-  .logo span { display: none; } /* ซ่อนชื่อร้านในมือถือ */
-  .logo-icon { width: 36px; height: 36px; }
-  .nav-links { gap: 14px; }
-  .nav-links a { font-size: 12px; }
+  .logo-text {
+    font-size: 18px;
+  }
+
+  .nav-admin {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+
+    background: white;
+    border-bottom: 1px solid #eee;
+    box-shadow:
+      0 4px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  .nav-links.mobile-open {
+    display: flex;
+  }
+
+  .nav-links a {
+    padding: 14px 24px;
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  .nav-links a::after {
+    display: none;
+  }
+
+  .mobile-admin {
+    display: block;
+  }
+
+  .menu-toggle.active span:nth-child(1) {
+    transform:
+      translateY(7px)
+      rotate(45deg);
+  }
+
+  .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle.active span:nth-child(3) {
+    transform:
+      translateY(-7px)
+      rotate(-45deg);
+  }
 }
 
 @media (max-width: 400px) {
-  .navbar { padding: 0 3%; }
-  .nav-links { gap: 9px; }
-  .nav-links a { font-size: 11px; }
+  .logo-text {
+    display: none;
+  }
 }
 </style>

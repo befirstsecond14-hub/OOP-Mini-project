@@ -1,77 +1,28 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const username = ref('')
-const password = ref('')
-const errorMessage = ref('')
-
-function login(): void {
-  errorMessage.value = ''
-
-  const adminUsername = 'admin'
-  const adminPassword = '1234'
-
-  if (
-    username.value === adminUsername &&
-    password.value === adminPassword
-  ) {
-    sessionStorage.setItem(
-      'adminLoggedIn',
-      'true'
-    )
-
-    router.push('/admin-dashboard')
-  } else {
-    errorMessage.value =
-      'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'
-  }
-}
-
-function goToHome(): void {
-  router.push('/')
-}
-</script>
-
 <template>
   <main class="login-page">
     <section class="login-card">
 
-      <div class="login-logo">R</div>
-
-      <p class="subtitle">
-        ADMIN
-      </p>
-
-      <h1>
-        เข้าสู่ระบบ Admin
-      </h1>
+      <h1>เข้าสู่ระบบ</h1>
 
       <p class="description">
-        กรุณาเข้าสู่ระบบเพื่อจัดการร้านอาหาร
+        เข้าสู่ระบบสมาชิกของร้านอาหาร
       </p>
 
       <form @submit.prevent="login">
 
         <div class="form-group">
-          <label>
-            ชื่อผู้ใช้
-          </label>
+          <label>อีเมล</label>
 
           <input
-            v-model="username"
-            type="text"
-            placeholder="กรอกชื่อผู้ใช้"
-            autocomplete="username"
+            v-model="email"
+            type="email"
+            placeholder="กรอกอีเมล"
+            autocomplete="email"
           />
         </div>
 
         <div class="form-group">
-          <label>
-            รหัสผ่าน
-          </label>
+          <label>รหัสผ่าน</label>
 
           <input
             v-model="password"
@@ -99,15 +50,59 @@ function goToHome(): void {
 
       <button
         type="button"
-        class="back-button"
-        @click="goToHome"
+        class="register-button"
+        @click="goToRegister"
       >
-        กลับหน้าแรก
+        สมัครสมาชิก
       </button>
 
     </section>
   </main>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/userStore'
+
+const router = useRouter()
+const userStore = useUserStore()
+
+const email = ref('')
+const password = ref('')
+const errorMessage = ref('')
+
+function login(): void {
+  errorMessage.value = ''
+
+  if (!email.value.trim()) {
+    errorMessage.value = 'กรุณากรอกอีเมล'
+    return
+  }
+
+  if (!password.value) {
+    errorMessage.value = 'กรุณากรอกรหัสผ่าน'
+    return
+  }
+
+  const success = userStore.login(
+    email.value.trim(),
+    password.value
+  )
+
+  if (!success) {
+    errorMessage.value =
+      'อีเมลหรือรหัสผ่านไม่ถูกต้อง'
+    return
+  }
+
+  router.push('/member')
+}
+
+function goToRegister(): void {
+  router.push('/register')
+}
+</script>
 
 <style scoped>
 .login-page {
@@ -128,57 +123,32 @@ function goToHome(): void {
   background: white;
   border-radius: 16px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.07);
-  text-align: center;
 }
 
-.login-logo {
-  width: 50px;
-  height: 50px;
-  margin: 0 auto 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  background: #e85d04;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.subtitle {
-  margin: 0 0 8px;
-  color: #e85d04;
-  font-size: 13px;
-  font-weight: bold;
-  letter-spacing: 3px;
-}
-
-h1 {
+.login-card h1 {
   margin: 0 0 10px;
+  text-align: center;
   font-size: 30px;
 }
 
 .description {
   margin: 0 0 30px;
   color: #777;
-}
-
-form {
-  text-align: left;
+  text-align: center;
 }
 
 .form-group {
   margin-bottom: 18px;
 }
 
-label {
+.form-group label {
   display: block;
   margin-bottom: 7px;
   color: #444;
   font-weight: bold;
 }
 
-input {
+.form-group input {
   width: 100%;
   padding: 13px 14px;
   box-sizing: border-box;
@@ -188,7 +158,7 @@ input {
   font-size: 15px;
 }
 
-input:focus {
+.form-group input:focus {
   border-color: #e85d04;
 }
 
@@ -214,7 +184,7 @@ input:focus {
   background: #d95000;
 }
 
-.back-button {
+.register-button {
   width: 100%;
   margin-top: 10px;
   padding: 13px;
@@ -226,7 +196,7 @@ input:focus {
   cursor: pointer;
 }
 
-.back-button:hover {
+.register-button:hover {
   background: #f8f8f8;
 }
 

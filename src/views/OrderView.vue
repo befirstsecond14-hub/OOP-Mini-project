@@ -89,7 +89,6 @@ function getStatusStep(): number {
       </p>
     </header>
 
-
     <!-- มี Order -->
     <section
       v-if="currentOrder"
@@ -115,7 +114,6 @@ function getStatusStep(): number {
 
       </div>
 
-
       <!-- ข้อมูลลูกค้า -->
       <div class="customer-info">
 
@@ -134,7 +132,11 @@ function getStatusStep(): number {
             เลขโต๊ะ
           </span>
 
-          <strong>
+          <strong v-if="tableNumber === 0">
+            สั่งกลับบ้าน
+          </strong>
+
+          <strong v-else>
             โต๊ะ {{ tableNumber }}
           </strong>
         </div>
@@ -150,7 +152,6 @@ function getStatusStep(): number {
         </div>
 
       </div>
-
 
       <!-- รายการอาหาร -->
       <section class="items-section">
@@ -181,7 +182,6 @@ function getStatusStep(): number {
 
         </div>
 
-
         <div
           v-if="orderItems.length === 0"
           class="empty-order"
@@ -190,7 +190,6 @@ function getStatusStep(): number {
         </div>
 
       </section>
-
 
       <!-- จำนวนทั้งหมด -->
       <div class="total">
@@ -205,7 +204,6 @@ function getStatusStep(): number {
 
       </div>
 
-
       <!-- ยอดรวม -->
       <div class="total total-price">
 
@@ -219,14 +217,12 @@ function getStatusStep(): number {
 
       </div>
 
-
       <!-- สถานะออเดอร์ -->
       <section class="status-section">
 
         <h2>
           สถานะออเดอร์
         </h2>
-
 
         <div class="order-status">
 
@@ -254,13 +250,11 @@ function getStatusStep(): number {
 
           </div>
 
-
           <!-- เส้น -->
           <div
             class="line"
             :class="{ active: getStatusStep() >= 2 }"
           ></div>
-
 
           <!-- ขั้นที่ 2 -->
           <div
@@ -286,13 +280,11 @@ function getStatusStep(): number {
 
           </div>
 
-
           <!-- เส้น -->
           <div
             class="line"
             :class="{ active: getStatusStep() >= 3 }"
           ></div>
-
 
           <!-- ขั้นที่ 3 -->
           <div
@@ -318,13 +310,11 @@ function getStatusStep(): number {
 
           </div>
 
-
           <!-- เส้น -->
           <div
             class="line"
             :class="{ active: getStatusStep() >= 4 }"
           ></div>
-
 
           <!-- ขั้นที่ 4 -->
           <div
@@ -354,7 +344,6 @@ function getStatusStep(): number {
 
       </section>
 
-
       <!-- ปุ่ม -->
       <div class="buttons">
 
@@ -377,7 +366,6 @@ function getStatusStep(): number {
       </div>
 
     </section>
-
 
     <!-- ไม่มี Order -->
     <section
@@ -405,7 +393,6 @@ function getStatusStep(): number {
 
   </main>
 </template>
-
 
 <style scoped>
 
@@ -957,4 +944,3 @@ function getStatusStep(): number {
 }
 
 </style>
-

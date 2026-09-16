@@ -4,12 +4,16 @@ import { useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cartStore'
 import { useOrderStore } from '../stores/orderStore'
 import { Payment } from '../models/Payment'
+import type { Order } from '../models/Order'
 
 const router = useRouter()
 const cartStore = useCartStore()
 const orderStore = useOrderStore()
 
-const paymentMethod = ref<'เงินสด' | 'โอนเงิน' | 'บัตรเครดิต'>('เงินสด')
+const paymentMethod = ref<
+  'เงินสด' | 'โอนเงิน' | 'บัตรเครดิต'
+>('เงินสด')
+
 const paymentSuccess = ref(false)
 const paymentAmount = ref(0)
 
@@ -26,7 +30,7 @@ function confirmPayment(): void {
     return
   }
 
-  const currentOrder = orderStore.currentOrder
+  const currentOrder = orderStore.getOrder
 
   if (!currentOrder) {
     alert('ไม่พบข้อมูลคำสั่งซื้อ')
@@ -34,20 +38,18 @@ function confirmPayment(): void {
     return
   }
 
-  // สร้างออบเจ็กต์ Payment (หลักการ OOP)
   const payment = new Payment(
     Date.now(),
-    currentOrder as any,
+    currentOrder as Order,
     paymentMethod.value
   )
 
-  // ดำเนินการชำระเงิน
   payment.pay()
 
-  // เก็บยอดเงินที่ชำระ
   paymentAmount.value = payment.getAmount()
 
-  // เปลี่ยนหน้าจอเป็น "ชำระเงินสำเร็จ"
+  orderStore.addToHistory()
+
   paymentSuccess.value = true
 }
 
@@ -67,99 +69,164 @@ function goToMenu(): void {
 <template>
   <main class="payment-page">
 
-    <!-- ==============================================
-         1. หน้าฟอร์มชำระเงิน
-    =============================================== -->
-    <section v-if="!paymentSuccess" class="payment-container">
-      
+    <section
+      v-if="!paymentSuccess"
+      class="payment-container"
+    >
       <header class="payment-header">
         <p class="subtitle">PAYMENT</p>
+
         <h1>ชำระเงิน</h1>
+
         <p>กรุณาเลือกวิธีการชำระเงิน</p>
       </header>
 
       <section class="payment-card">
-        
-        <!-- ยอดที่ต้องชำระ -->
+
         <div class="price-box">
           <span>ยอดที่ต้องชำระ</span>
-          <strong>{{ formatPrice(totalPrice) }}</strong>
+
+          <strong>
+            {{ formatPrice(totalPrice) }}
+          </strong>
         </div>
 
-        <!-- เลือกวิธีชำระเงิน -->
         <div class="form-group">
-          <label for="payment-method">วิธีการชำระเงิน</label>
-          <select id="payment-method" v-model="paymentMethod">
-            <option value="เงินสด">เงินสด</option>
-            <option value="โอนเงิน">โอนเงิน</option>
-            <option value="บัตรเครดิต">บัตรเครดิต</option>
+          <label for="payment-method">
+            วิธีการชำระเงิน
+          </label>
+
+          <select
+            id="payment-method"
+            v-model="paymentMethod"
+          >
+            <option value="เงินสด">
+              เงินสด
+            </option>
+
+            <option value="โอนเงิน">
+              โอนเงิน
+            </option>
+
+            <option value="บัตรเครดิต">
+              บัตรเครดิต
+            </option>
           </select>
         </div>
 
-        <!-- ข้อมูลโอนเงิน -->
-        <div v-if="paymentMethod === 'โอนเงิน'" class="payment-info">
+        <div
+          v-if="paymentMethod === 'โอนเงิน'"
+          class="payment-info"
+        >
           <h3>ข้อมูลการโอนเงิน</h3>
+
           <p>ธนาคาร My Restaurant</p>
+
           <p>เลขบัญชี: 123-4-56789-0</p>
         </div>
 
-        <!-- ข้อมูลบัตรเครดิต -->
-        <div v-if="paymentMethod === 'บัตรเครดิต'" class="payment-info">
+        <div
+          v-if="paymentMethod === 'บัตรเครดิต'"
+          class="payment-info"
+        >
           <h3>ชำระด้วยบัตรเครดิต</h3>
-          <input type="text" placeholder="หมายเลขบัตร">
-          <input type="text" placeholder="ชื่อบนบัตร">
+
+          <input
+            type="text"
+            placeholder="หมายเลขบัตร"
+          />
+
+          <input
+            type="text"
+            placeholder="ชื่อบนบัตร"
+          />
         </div>
 
-        <!-- ปุ่มยืนยัน -->
-        <button class="payment-button" @click="confirmPayment">
+        <button
+          type="button"
+          class="payment-button"
+          @click="confirmPayment"
+        >
           ยืนยันการชำระเงิน
         </button>
 
-        <button class="back-button" @click="goToCheckout">
+        <button
+          type="button"
+          class="back-button"
+          @click="goToCheckout"
+        >
           กลับไปหน้าสั่งซื้อ
         </button>
 
       </section>
     </section>
 
-    <!-- ==============================================
-         2. หน้าชำระเงินสำเร็จ (Success)
-    =============================================== -->
-    <section v-else class="success-container">
+    <section
+      v-else
+      class="success-container"
+    >
       <div class="success-card">
-        
-        <div class="success-icon">✓</div>
-        <p class="subtitle">PAYMENT SUCCESS</p>
-        <h1>ชำระเงินสำเร็จ</h1>
-        <p class="success-message">ระบบได้รับการชำระเงินของคุณแล้ว</p>
 
-        <!-- รายละเอียดใบเสร็จ -->
-        <div class="payment-detail">
-          <div class="detail-row">
-            <span>วิธีชำระเงิน</span>
-            <strong>{{ paymentMethod }}</strong>
-          </div>
-          
-          <div class="detail-row">
-            <span>ยอดชำระ</span>
-            <strong>{{ formatPrice(paymentAmount) }}</strong>
-          </div>
-          
-          <div class="detail-row">
-            <span>สถานะ</span>
-            <strong class="status">ชำระเงินแล้ว</strong>
-          </div>
+        <div class="success-icon">
+          ✓
         </div>
 
-        <!-- ปุ่มไปหน้าอื่นๆ -->
+        <p class="subtitle">
+          PAYMENT SUCCESS
+        </p>
+
+        <h1>ชำระเงินสำเร็จ</h1>
+
+        <p class="success-message">
+          ระบบได้รับการชำระเงินของคุณแล้ว
+        </p>
+
+        <div class="payment-detail">
+
+          <div class="detail-row">
+            <span>วิธีชำระเงิน</span>
+
+            <strong>
+              {{ paymentMethod }}
+            </strong>
+          </div>
+
+          <div class="detail-row">
+            <span>ยอดชำระ</span>
+
+            <strong>
+              {{ formatPrice(paymentAmount) }}
+            </strong>
+          </div>
+
+          <div class="detail-row">
+            <span>สถานะ</span>
+
+            <strong class="status">
+              ชำระเงินแล้ว
+            </strong>
+          </div>
+
+        </div>
+
         <div class="buttons">
-          <button class="order-button" @click="goToOrder">
+
+          <button
+            type="button"
+            class="order-button"
+            @click="goToOrder"
+          >
             ดูรายการออเดอร์
           </button>
-          
-          <button class="menu-button" @click="goToMenu">
+
+          <button
+            type="button"
+            class="menu-button"
+            @click="goToMenu"
+          >
             กลับไปเลือกเมนู
           </button>
+
         </div>
 
       </div>
@@ -169,9 +236,6 @@ function goToMenu(): void {
 </template>
 
 <style scoped>
-/* ==============================================
-   LAYOUT & HEADER
-============================================== */
 .payment-page {
   min-height: calc(100vh - 70px);
   padding: 50px 20px 70px;
@@ -179,13 +243,16 @@ function goToMenu(): void {
   background: #faf9f7;
 }
 
-.payment-container, .success-container {
+.payment-container,
+.success-container {
   width: 100%;
   max-width: 650px;
   margin: 0 auto;
 }
 
-.success-container { margin: 20px auto; }
+.success-container {
+  margin: 20px auto;
+}
 
 .payment-header {
   margin-bottom: 30px;
@@ -200,14 +267,21 @@ function goToMenu(): void {
   letter-spacing: 3px;
 }
 
-.payment-header h1 { margin: 0 0 10px; color: #222; font-size: 40px; line-height: 1.2; }
-.payment-header p:last-child { margin: 0; color: #777; font-size: 15px; }
+.payment-header h1 {
+  margin: 0 0 10px;
+  color: #222;
+  font-size: 40px;
+  line-height: 1.2;
+}
 
+.payment-header p:last-child {
+  margin: 0;
+  color: #777;
+  font-size: 15px;
+}
 
-/* ==============================================
-   CARDS (PAYMENT & SUCCESS)
-============================================== */
-.payment-card, .success-card {
+.payment-card,
+.success-card {
   padding: 30px;
   border: 1px solid #eeeeee;
   border-radius: 16px;
@@ -215,11 +289,11 @@ function goToMenu(): void {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
 }
 
-.success-card { padding: 50px 35px; text-align: center; }
+.success-card {
+  padding: 50px 35px;
+  text-align: center;
+}
 
-/* ==============================================
-   PRICE & FORM (PAYMENT VIEW)
-============================================== */
 .price-box {
   display: flex;
   align-items: center;
@@ -232,11 +306,29 @@ function goToMenu(): void {
   background: #fff1e8;
 }
 
-.price-box span { color: #555; font-size: 15px; }
-.price-box strong { color: #e85d04; font-size: 24px; font-weight: bold; }
+.price-box span {
+  color: #555;
+  font-size: 15px;
+}
 
-.form-group { margin-bottom: 22px; }
-.form-group label { display: block; margin-bottom: 8px; color: #222; font-size: 15px; font-weight: bold; }
+.price-box strong {
+  color: #e85d04;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #222;
+  font-size: 15px;
+  font-weight: bold;
+}
+
 .form-group select {
   width: 100%;
   padding: 13px 14px;
@@ -249,7 +341,10 @@ function goToMenu(): void {
   outline: none;
   cursor: pointer;
 }
-.form-group select:focus { border-color: #e85d04; }
+
+.form-group select:focus {
+  border-color: #e85d04;
+}
 
 .payment-info {
   margin-bottom: 20px;
@@ -259,8 +354,17 @@ function goToMenu(): void {
   background: #faf9f7;
 }
 
-.payment-info h3 { margin: 0 0 15px; color: #222; font-size: 17px; }
-.payment-info p { margin: 8px 0; color: #666; font-size: 14px; }
+.payment-info h3 {
+  margin: 0 0 15px;
+  color: #222;
+  font-size: 17px;
+}
+
+.payment-info p {
+  margin: 8px 0;
+  color: #666;
+  font-size: 14px;
+}
 
 .payment-info input {
   width: 100%;
@@ -273,15 +377,17 @@ function goToMenu(): void {
   font-size: 15px;
   outline: none;
 }
-.payment-info input:focus { border-color: #e85d04; }
 
-/* ==============================================
-   BUTTONS
-============================================== */
-.payment-button, .back-button, .order-button, .menu-button {
+.payment-info input:focus {
+  border-color: #e85d04;
+}
+
+.payment-button,
+.back-button,
+.order-button,
+.menu-button {
   width: 100%;
   padding: 14px;
-  border: none;
   border-radius: 8px;
   font-family: inherit;
   font-size: 15px;
@@ -290,15 +396,30 @@ function goToMenu(): void {
   transition: 0.2s;
 }
 
-.payment-button { background: #e85d04; color: white; }
-.payment-button:hover { background: #d94f00; transform: translateY(-1px); }
+.payment-button {
+  border: none;
+  background: #e85d04;
+  color: white;
+}
 
-.back-button { margin-top: 10px; border: 1px solid #ddd; background: white; color: #555; }
-.back-button:hover { border-color: #e85d04; color: #e85d04; background: #fffaf7; }
+.payment-button:hover {
+  background: #d94f00;
+  transform: translateY(-1px);
+}
 
-/* ==============================================
-   SUCCESS ELEMENTS
-============================================== */
+.back-button {
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  background: white;
+  color: #555;
+}
+
+.back-button:hover {
+  border-color: #e85d04;
+  background: #fffaf7;
+  color: #e85d04;
+}
+
 .success-icon {
   width: 70px;
   height: 70px;
@@ -313,8 +434,17 @@ function goToMenu(): void {
   font-weight: bold;
 }
 
-.success-card h1 { margin: 10px 0; color: #222; font-size: 32px; }
-.success-message { margin: 0; color: #777; font-size: 15px; }
+.success-card h1 {
+  margin: 10px 0;
+  color: #222;
+  font-size: 32px;
+}
+
+.success-message {
+  margin: 0;
+  color: #777;
+  font-size: 15px;
+}
 
 .payment-detail {
   margin-top: 30px;
@@ -333,29 +463,84 @@ function goToMenu(): void {
   padding: 13px 0;
   border-bottom: 1px solid #e5e5e5;
 }
-.detail-row:last-child { border-bottom: none; }
-.detail-row span { color: #777; font-size: 14px; }
-.detail-row strong { color: #333; font-size: 14px; }
-.detail-row .status { color: #2e9d50; }
 
-.buttons { display: flex; gap: 10px; margin-top: 25px; }
-.order-button { background: #e85d04; color: white; flex: 1; }
-.order-button:hover { background: #d94f00; transform: translateY(-1px); }
-.menu-button { border: 1px solid #ddd; background: white; color: #555; flex: 1; }
-.menu-button:hover { border-color: #e85d04; color: #e85d04; background: #fffaf7; }
+.detail-row:last-child {
+  border-bottom: none;
+}
 
+.detail-row span {
+  color: #777;
+  font-size: 14px;
+}
 
-/* ==============================================
-   RESPONSIVE DESIGN
-============================================== */
+.detail-row strong {
+  color: #333;
+  font-size: 14px;
+}
+
+.detail-row .status {
+  color: #2e9d50;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.order-button {
+  border: none;
+  background: #e85d04;
+  color: white;
+  flex: 1;
+}
+
+.order-button:hover {
+  background: #d94f00;
+  transform: translateY(-1px);
+}
+
+.menu-button {
+  border: 1px solid #ddd;
+  background: white;
+  color: #555;
+  flex: 1;
+}
+
+.menu-button:hover {
+  border-color: #e85d04;
+  background: #fffaf7;
+  color: #e85d04;
+}
+
 @media (max-width: 600px) {
-  .payment-page { padding: 40px 18px 60px; }
-  .payment-card { padding: 25px 20px; }
-  .payment-header h1 { font-size: 32px; }
-  .price-box { align-items: flex-start; flex-direction: column; }
-  
-  .success-card { padding: 40px 20px; }
-  .success-card h1 { font-size: 28px; }
-  .buttons { flex-direction: column; }
+  .payment-page {
+    padding: 40px 18px 60px;
+  }
+
+  .payment-card {
+    padding: 25px 20px;
+  }
+
+  .payment-header h1 {
+    font-size: 32px;
+  }
+
+  .price-box {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .success-card {
+    padding: 40px 20px;
+  }
+
+  .success-card h1 {
+    font-size: 28px;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
 }
 </style>
