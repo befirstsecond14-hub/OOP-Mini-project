@@ -1,5 +1,3 @@
-// Pinia is provided by the project's runtime dependencies.
-// @ts-expect-error Pinia types may be unavailable until dependencies are installed.
 import { defineStore } from 'pinia'
 import { Food } from '../models/Food'
 import { Drink } from '../models/Drink'
@@ -107,42 +105,41 @@ export const useMenuStore = defineStore('menu', {
   }),
 
   getters: {
-    allItems: (state: MenuState) => {
+    allItems: (state) => {
       return state.items
     },
 
-    foods: (state: MenuState): MenuItem[] => {
+    foods: (state) => {
       return state.items.filter(
-        (item: MenuItem) => item.getType() === 'อาหาร'
+        (item) => item.getType() === 'อาหาร'
       )
     },
 
-    drinks: (state: MenuState): MenuItem[] => {
+    drinks: (state) => {
       return state.items.filter(
-        (item: MenuItem) => item.getType() === 'เครื่องดื่ม'
+        (item) => item.getType() === 'เครื่องดื่ม'
       )
     }
   },
 
   actions: {
-    addItem(this: MenuState, item: MenuItem): void {
+    addItem(item: MenuItem): void {
       this.items.push(item)
     },
 
-    removeItem(this: MenuState, id: number): void {
+    removeItem(id: number): void {
       this.items = this.items.filter(
-        (item: MenuItem) => item.getId() !== id
+        (item) => item.getId() !== id
       )
     },
 
     updateItem(
-      this: MenuState,
       id: number,
       name: string,
       price: number
     ): void {
       const item = this.items.find(
-        item => item.getId() === id
+        (item) => item.getId() === id
       )
 
       if (!item) {

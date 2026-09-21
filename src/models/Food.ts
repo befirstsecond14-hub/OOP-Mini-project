@@ -1,8 +1,6 @@
 import { MenuItem } from './MenuItem'
 
-// คลาสลูก
-// Inheritance
-
+// คลาสลูก: Inheritance + Polymorphism
 export class Food extends MenuItem {
 
   constructor(

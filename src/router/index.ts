@@ -1,4 +1,4 @@
-// @ts-expect-error: vue-router is provided by the project dependency at runtime.
+
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({

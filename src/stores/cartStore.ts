@@ -1,23 +1,25 @@
-// Pinia is provided by the project's runtime dependencies.
-// @ts-expect-error Pinia may be unavailable to the standalone TypeScript checker.
 import { defineStore } from 'pinia'
 import { MenuItem } from '../models/MenuItem'
 import { OrderItem } from '../models/OrderItem'
 
+export interface CartStoreState {
+  items: OrderItem[]
+}
+
 export const useCartStore = defineStore('cart', {
-  state: () => ({
-    items: [] as OrderItem[]
+  state: (): CartStoreState => ({
+    items: []
   }),
 
   getters: {
-    totalQuantity(state: { items: OrderItem[] }): number {
+    totalQuantity(state): number {
       return state.items.reduce(
         (total, item) => total + item.getQuantity(),
         0
       )
     },
 
-    totalPrice(state: { items: OrderItem[] }): number {
+    totalPrice(state): number {
       return state.items.reduce(
         (total, item) => total + item.getSubtotal(),
         0
@@ -26,7 +28,7 @@ export const useCartStore = defineStore('cart', {
   },
 
   actions: {
-    addToCart(this: { items: OrderItem[] }, menuItem: MenuItem): void {
+    addToCart(menuItem: MenuItem): void {
       const existingItem = this.items.find(
         item => item.getMenuItem().getId() === menuItem.getId()
       )
@@ -38,27 +40,31 @@ export const useCartStore = defineStore('cart', {
       }
     },
 
-    increaseQuantity(this: { items: OrderItem[] }, index: number): void {
+    increaseQuantity(index: number): void {
       const item = this.items[index]
-
       if (item) {
         item.increaseQuantity()
       }
     },
 
-    decreaseQuantity(this: { items: OrderItem[] }, index: number): void {
+    decreaseQuantity(index: number): void {
       const item = this.items[index]
-
       if (item) {
         item.decreaseQuantity()
+        // ถ้าลดจำนวนจนเหลือ <= 0 ให้ลบรายการนั้นออกจากตะกร้าทันที
+        if (item.getQuantity() <= 0) {
+          this.removeItem(index)
+        }
       }
     },
 
-    removeItem(this: { items: OrderItem[] }, index: number): void {
-      this.items.splice(index, 1)
+    removeItem(index: number): void {
+      if (index >= 0 && index < this.items.length) {
+        this.items.splice(index, 1)
+      }
     },
 
-    clearCart(this: { items: OrderItem[] }): void {
+    clearCart(): void {
       this.items = []
     }
   }
