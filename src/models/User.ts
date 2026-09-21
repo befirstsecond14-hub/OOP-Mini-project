@@ -1,12 +1,13 @@
 export type UserRole = 'customer' | 'admin'
 
 export class User {
+
   constructor(
     private readonly id: number,
     private name: string,
     private email: string,
     private password: string,
-    private role: UserRole = 'customer' // ค่าเริ่มต้นยังคงเป็น customer
+    private readonly role: UserRole = 'customer'
   ) {}
 
   getId(): number {
@@ -21,6 +22,10 @@ export class User {
     return this.email
   }
 
+  getPassword(): string {
+    return this.password
+  }
+
   getRole(): UserRole {
     return this.role
   }
@@ -33,16 +38,8 @@ export class User {
     this.name = name
   }
 
-  setEmail(email: string): void {
-    this.email = email
-  }
-
   setPassword(password: string): void {
     this.password = password
-  }
-
-  setRole(role: UserRole): void {
-    this.role = role
   }
 
   get isAdmin(): boolean {
