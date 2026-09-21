@@ -36,7 +36,11 @@
       </router-link>
 
       <router-link
-        to="/member-login"
+        :to="
+          userStore.isLoggedIn
+            ? '/member'
+            : '/member-login'
+        "
         @click="closeMenu"
       >
         สมาชิก
@@ -78,6 +82,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useUserStore } from '../stores/userStore'
+
+const userStore = useUserStore()
 
 const isMenuOpen = ref(false)
 

@@ -1,6 +1,7 @@
 export type UserRole = 'customer' | 'admin'
 
 export class User {
+
   constructor(
     private readonly id: number,
     private name: string,
@@ -19,6 +20,10 @@ export class User {
 
   getEmail(): string {
     return this.email
+  }
+
+  getPassword(): string {
+    return this.password
   }
 
   getRole(): UserRole {

@@ -126,7 +126,7 @@ function register(): void {
     return
   }
 
-  router.push('/member-login')
+  router.push('/member')
 }
 
 function goToLogin(): void {
