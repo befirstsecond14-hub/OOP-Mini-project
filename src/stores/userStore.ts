@@ -1,5 +1,11 @@
+// @ts-expect-error Pinia is provided by the project runtime when dependencies are installed.
 import { defineStore } from 'pinia'
 import { User } from '../models/User'
+
+type UserStoreState = {
+  users: User[]
+  currentUser: User | null
+}
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -8,19 +14,20 @@ export const useUserStore = defineStore('user', {
   }),
 
   getters: {
-    isLoggedIn: (state): boolean => {
+    isLoggedIn: (state: { users: User[]; currentUser: User | null }): boolean => {
       return state.currentUser !== null
     }
   },
 
   actions: {
     register(
+      this: UserStoreState,
       name: string,
       email: string,
       password: string
     ): boolean {
       const exists = this.users.some(
-        user => user.getEmail() === email
+        (user: User) => user.getEmail() === email
       )
 
       if (exists) {
@@ -42,6 +49,7 @@ export const useUserStore = defineStore('user', {
     },
 
     login(
+      this: UserStoreState,
       email: string,
       password: string
     ): boolean {
@@ -60,11 +68,11 @@ export const useUserStore = defineStore('user', {
       return true
     },
 
-    logout(): void {
+    logout(this: UserStoreState): void {
       this.currentUser = null
     },
 
-    updateName(name: string): void {
+    updateName(this: UserStoreState, name: string): void {
       if (!this.currentUser) {
         return
       }
@@ -72,7 +80,7 @@ export const useUserStore = defineStore('user', {
       this.currentUser.setName(name)
     },
 
-    updatePassword(password: string): void {
+    updatePassword(this: UserStoreState, password: string): void {
       if (!this.currentUser) {
         return
       }

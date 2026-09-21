@@ -1,8 +1,10 @@
 <script setup lang="ts">
+// @ts-ignore Vue is provided by the project runtime when dependencies are installed.
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
+function navigate(path: string): void {
+  window.location.assign(path)
+}
 
 const username = ref('')
 const password = ref('')
@@ -23,7 +25,7 @@ function login(): void {
       'true'
     )
 
-    router.push('/admin-dashboard')
+    navigate('/admin-dashboard')
   } else {
     errorMessage.value =
       'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'
@@ -31,7 +33,7 @@ function login(): void {
 }
 
 function goToHome(): void {
-  router.push('/')
+  navigate('/')
 }
 </script>
 

@@ -58,21 +58,21 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
+function navigate(path: string): void {
+  window.location.assign(path)
+}
 
 function goToMenu(): void {
-  router.push('/admin-menu')
+  navigate('/admin-menu')
 }
 
 function goToOrder(): void {
-  router.push('/admin-order')
+  navigate('/admin-order')
 }
 
 function logout(): void {
   sessionStorage.removeItem('adminLoggedIn')
-  router.push('/admin-login')
+  navigate('/admin-login')
 }
 </script>
 

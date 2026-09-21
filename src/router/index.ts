@@ -1,3 +1,4 @@
+// @ts-expect-error: vue-router is provided by the project dependency at runtime.
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -99,7 +100,7 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to) => {
+router.beforeEach((to: any) => {
   if (to.meta.requiresAdmin) {
     const isAdminLoggedIn =
       sessionStorage.getItem('adminLoggedIn') === 'true'
