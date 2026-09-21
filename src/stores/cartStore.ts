@@ -1,3 +1,5 @@
+// Pinia is provided by the project's runtime dependencies.
+// @ts-expect-error Pinia may be unavailable to the standalone TypeScript checker.
 import { defineStore } from 'pinia'
 import { MenuItem } from '../models/MenuItem'
 import { OrderItem } from '../models/OrderItem'
@@ -8,14 +10,14 @@ export const useCartStore = defineStore('cart', {
   }),
 
   getters: {
-    totalQuantity(state): number {
+    totalQuantity(state: { items: OrderItem[] }): number {
       return state.items.reduce(
         (total, item) => total + item.getQuantity(),
         0
       )
     },
 
-    totalPrice(state): number {
+    totalPrice(state: { items: OrderItem[] }): number {
       return state.items.reduce(
         (total, item) => total + item.getSubtotal(),
         0
@@ -24,7 +26,7 @@ export const useCartStore = defineStore('cart', {
   },
 
   actions: {
-    addToCart(menuItem: MenuItem): void {
+    addToCart(this: { items: OrderItem[] }, menuItem: MenuItem): void {
       const existingItem = this.items.find(
         item => item.getMenuItem().getId() === menuItem.getId()
       )
@@ -36,7 +38,7 @@ export const useCartStore = defineStore('cart', {
       }
     },
 
-    increaseQuantity(index: number): void {
+    increaseQuantity(this: { items: OrderItem[] }, index: number): void {
       const item = this.items[index]
 
       if (item) {
@@ -44,7 +46,7 @@ export const useCartStore = defineStore('cart', {
       }
     },
 
-    decreaseQuantity(index: number): void {
+    decreaseQuantity(this: { items: OrderItem[] }, index: number): void {
       const item = this.items[index]
 
       if (item) {
@@ -52,11 +54,11 @@ export const useCartStore = defineStore('cart', {
       }
     },
 
-    removeItem(index: number): void {
+    removeItem(this: { items: OrderItem[] }, index: number): void {
       this.items.splice(index, 1)
     },
 
-    clearCart(): void {
+    clearCart(this: { items: OrderItem[] }): void {
       this.items = []
     }
   }
