@@ -35,8 +35,9 @@
         ประวัติการสั่งซื้อ
       </router-link>
 
+      <!-- สลับหน้าอัตโนมัติ: ถ้าล็อกอินแล้วไป /member ถ้ายังไม่ล็อกอินไป /member-login -->
       <router-link
-        to="/member-login"
+        :to="userStore.isLoggedIn ? '/member' : '/member-login'"
         @click="closeMenu"
       >
         สมาชิก
@@ -78,7 +79,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
+import { useUserStore } from '../stores/userStore'
+const userStore = useUserStore()
 const isMenuOpen = ref(false)
 
 function toggleMenu(): void {
@@ -103,8 +105,7 @@ function closeMenu(): void {
   justify-content: space-between;
   background: #ffffff;
   border-bottom: 1px solid #f0f0f0;
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   box-sizing: border-box;
 }
 
@@ -123,16 +124,11 @@ function closeMenu(): void {
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  background: linear-gradient(
-    135deg,
-    #ff7b00,
-    #e85d04
-  );
+  background: linear-gradient(135deg, #ff7b00, #e85d04);
   color: white;
   font-weight: 700;
   font-size: 18px;
-  box-shadow:
-    0 4px 10px rgba(232, 93, 4, 0.2);
+  box-shadow: 0 4px 10px rgba(232, 93, 4, 0.2);
 }
 
 .logo-text {
@@ -254,16 +250,13 @@ function closeMenu(): void {
     top: 64px;
     left: 0;
     right: 0;
-
     display: none;
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-
     background: white;
     border-bottom: 1px solid #eee;
-    box-shadow:
-      0 4px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   }
 
   .nav-links.mobile-open {
@@ -284,9 +277,7 @@ function closeMenu(): void {
   }
 
   .menu-toggle.active span:nth-child(1) {
-    transform:
-      translateY(7px)
-      rotate(45deg);
+    transform: translateY(7px) rotate(45deg);
   }
 
   .menu-toggle.active span:nth-child(2) {
@@ -294,9 +285,7 @@ function closeMenu(): void {
   }
 
   .menu-toggle.active span:nth-child(3) {
-    transform:
-      translateY(-7px)
-      rotate(-45deg);
+    transform: translateY(-7px) rotate(-45deg);
   }
 }
 

@@ -6,7 +6,7 @@ export class User {
     private name: string,
     private email: string,
     private password: string,
-    private readonly role: UserRole = 'customer'
+    private role: UserRole = 'customer' // ค่าเริ่มต้นยังคงเป็น customer
   ) {}
 
   getId(): number {
@@ -33,8 +33,16 @@ export class User {
     this.name = name
   }
 
+  setEmail(email: string): void {
+    this.email = email
+  }
+
   setPassword(password: string): void {
     this.password = password
+  }
+
+  setRole(role: UserRole): void {
+    this.role = role
   }
 
   get isAdmin(): boolean {
