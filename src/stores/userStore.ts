@@ -1,8 +1,6 @@
-// @ts-expect-error Pinia is provided by the project runtime when dependencies are installed.
 import { defineStore } from 'pinia'
 import { User } from '../models/User'
 
-<<<<<<< HEAD
 // ฟังก์ชันสำหรับแปลง Raw Object จาก localStorage กลับมาเป็น Class User Instance
 const restoreUserInstance = (userData: any): User | null => {
   if (!userData) return null
@@ -13,11 +11,6 @@ const restoreUserInstance = (userData: any): User | null => {
     userData.password
   )
   return user
-=======
-type UserStoreState = {
-  users: User[]
-  currentUser: User | null
->>>>>>> 7b617d8d7421b6b53b85f5d6587457ab691b8f82
 }
 
 export const useUserStore = defineStore('user', {
@@ -40,7 +33,7 @@ export const useUserStore = defineStore('user', {
   },
 
   getters: {
-    isLoggedIn: (state: { users: User[]; currentUser: User | null }): boolean => {
+    isLoggedIn: (state): boolean => {
       return state.currentUser !== null
     }
   },
@@ -61,13 +54,12 @@ export const useUserStore = defineStore('user', {
     },
 
     register(
-      this: UserStoreState,
       name: string,
       email: string,
       password: string
     ): boolean {
       const exists = this.users.some(
-        (user: User) => user.getEmail() === email
+        user => user.getEmail() === email
       )
 
       if (exists) {
@@ -90,7 +82,6 @@ export const useUserStore = defineStore('user', {
     },
 
     login(
-      this: UserStoreState,
       email: string,
       password: string
     ): boolean {
@@ -110,12 +101,12 @@ export const useUserStore = defineStore('user', {
       return true
     },
 
-    logout(this: UserStoreState): void {
+    logout(): void {
       this.currentUser = null
       this.saveCurrentUserToStorage() // ลบสถานะออกจากเครื่อง
     },
 
-    updateName(this: UserStoreState, name: string): void {
+    updateName(name: string): void {
       if (!this.currentUser) {
         return
       }
@@ -125,7 +116,7 @@ export const useUserStore = defineStore('user', {
       this.saveCurrentUserToStorage()
     },
 
-    updatePassword(this: UserStoreState, password: string): void {
+    updatePassword(password: string): void {
       if (!this.currentUser) {
         return
       }
