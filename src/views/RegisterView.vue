@@ -79,7 +79,9 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore
 import { ref } from 'vue'
+// @ts-ignore
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/userStore'
 

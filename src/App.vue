@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import Navbar from './components/Navbar.vue'
+import { defineAsyncComponent } from 'vue'
+
+const Navbar = defineAsyncComponent(() => import('./components/Navbar.vue'))
 </script>
 
 <template>
   <Navbar />
-  
+
   <!-- แสดงผลหน้าจอต่างๆ ตาม URL ที่ผู้ใช้เข้าถึง -->
   <router-view />
 </template>
