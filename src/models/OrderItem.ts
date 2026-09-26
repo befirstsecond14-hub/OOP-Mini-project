@@ -2,12 +2,15 @@ import { MenuItem } from './MenuItem'
 
 export class OrderItem {
   private quantity: number
+  private note: string
 
   constructor(
     private menuItem: MenuItem,
-    quantity: number
+    quantity: number,
+    note: string = ''
   ) {
     this.quantity = quantity
+    this.note = note
   }
 
   getMenuItem(): MenuItem {
@@ -16,6 +19,14 @@ export class OrderItem {
 
   getQuantity(): number {
     return this.quantity
+  }
+
+  getNote(): string {
+    return this.note
+  }
+
+  setNote(note: string): void {
+    this.note = note
   }
 
   increaseQuantity(): void {

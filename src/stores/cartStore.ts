@@ -64,6 +64,11 @@ export const useCartStore = defineStore('cart', {
       }
     },
 
+    updateNote(index: number, note: string): void {
+      const item = this.items[index]
+      if (item) item.setNote(note)
+    },
+
     clearCart(): void {
       this.items = []
     }

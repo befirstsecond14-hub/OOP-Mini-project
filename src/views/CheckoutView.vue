@@ -42,7 +42,8 @@ function submitOrder(): void {
     newOrder.addItem(
       new OrderItem(
         item.getMenuItem(),
-        item.getQuantity()
+        item.getQuantity(),
+        item.getNote ? item.getNote() : ''
       )
     )
   })
