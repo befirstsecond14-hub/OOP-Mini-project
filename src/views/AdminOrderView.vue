@@ -21,6 +21,10 @@ const tableNumber = computed(() => {
   return currentOrder.value?.getTableNumber() ?? 0
 })
 
+const note = computed(() => {
+  return currentOrder.value?.getNote?.() ?? '-'
+})
+
 const status = computed(() => {
   return currentOrder.value?.getStatus() ?? 'ไม่พบสถานะ'
 })
@@ -141,6 +145,8 @@ function getStatusClass(
             โต๊ะ {{ tableNumber }}
           </strong>
         </div>
+
+        <div><span>หมายเหตุ</span><strong>{{ note }}</strong></div>
 
       </div>
 

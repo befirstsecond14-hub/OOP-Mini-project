@@ -13,6 +13,7 @@ const orderStore = useOrderStore()
 const customerName = ref('')
 const tableNumber = ref(1)
 const diningOption = ref<'ทานที่ร้าน' | 'กลับบ้าน'>('ทานที่ร้าน')
+const orderNote = ref('')
 
 const totalPrice = computed(() =>
   cartStore.items.reduce(
@@ -35,7 +36,8 @@ function submitOrder(): void {
   const newOrder = new Order(
     Date.now(),
     customerName.value.trim(),
-    tableNumber.value
+    tableNumber.value,
+    orderNote.value.trim()
   )
 
   cartStore.items.forEach(item => {
@@ -155,6 +157,15 @@ function goBack(): void {
             </button>
           </div>
         </div>
+        <div class="form-group">
+          <label for="order-note">หมายเหตุ</label>
+          <textarea
+            id="order-note"
+            v-model="orderNote"
+            placeholder="เช่น ไม่เผ็ด, ไม่ใส่ผัก"
+          />
+        </div>
+
       </section>
 
       <section class="order-items">

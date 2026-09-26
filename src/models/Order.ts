@@ -14,8 +14,17 @@ export class Order {
   constructor(
     private id: number,
     private customerName: string,
-    private tableNumber: number
+    private tableNumber: number,
+    private note: string = ''
   ) {}
+
+  getNote(): string {
+    return this.note
+  }
+
+  setNote(note: string): void {
+    this.note = note
+  }
 
   addItem(item: OrderItem): void {
     this.items.push(item)

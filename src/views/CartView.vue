@@ -87,12 +87,6 @@ const clearCart = (): void =>
                 {{ formatPrice(item.getMenuItem().getPrice()) }}
                 / ชิ้น
               </p>
-              <textarea
-                class="note-input"
-                :value="item.getNote ? item.getNote() : ''"
-                placeholder="หมายเหตุ เช่น ไม่ใส่ผัก"
-                @input="cartStore.updateNote(index, ($event.target as HTMLTextAreaElement).value)"
-              />
             </div>
 
             <!-- QUANTITY -->
@@ -355,34 +349,6 @@ const clearCart = (): void =>
   font-size: 13px;
 }
 
-/* NOTE */
-.note-input {
-  width: 100%;
-  min-height: 58px;
-  margin-top: 11px;
-  padding: 9px 11px;
-  box-sizing: border-box;
-  border: 1px solid #e6e1dd;
-  border-radius: 8px;
-  background: #fcfbfa;
-  color: #333;
-  font-family: inherit;
-  font-size: 13px;
-  line-height: 1.5;
-  resize: vertical;
-  outline: none;
-  transition: border-color .2s, box-shadow .2s, background .2s;
-}
-
-.note-input::placeholder {
-  color: #999;
-}
-
-.note-input:focus {
-  border-color: #e8a06d;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(232, 93, 4, .08);
-}
 
 /* QUANTITY */
 .quantity-section {
