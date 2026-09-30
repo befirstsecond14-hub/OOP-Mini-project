@@ -1,4 +1,3 @@
-```vue
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useCartStore } from '../stores/cartStore'
@@ -23,6 +22,11 @@ const removeItem = (index: number): void =>
 
 const clearCart = (): void =>
   cartStore.clearCart()
+
+const updateItemNote = (index: number, event: Event): void => {
+  const target = event.target as HTMLTextAreaElement | null
+  cartStore.updateNote(index, target?.value ?? '')
+}
 </script>
 
 <template>
@@ -110,6 +114,26 @@ const clearCart = (): void =>
                 >
                   +
                 </button>
+              </div>
+            </div>
+
+            <!-- NOTE -->
+            <div class="item-note">
+              <label :for="`item-note-${index}`">
+                <span class="note-icon">✎</span> หมายเหตุรายการ
+              </label>
+
+              <textarea
+                :id="`item-note-${index}`"
+                :value="item.getNote()"
+                maxlength="200"
+                placeholder="เช่น ไม่เผ็ด, ไม่ใส่ผัก"
+                @input="updateItemNote(index, $event)"
+              />
+
+              <div class="note-meta">
+                <span>ถ้ามีรายละเอียดเพิ่มเติม</span>
+                <span>{{ item.getNote().length }}/200</span>
               </div>
             </div>
 
@@ -317,7 +341,7 @@ const clearCart = (): void =>
 
 .cart-item {
   display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: minmax(180px, 1fr) minmax(240px, 1.4fr) auto auto auto;
   align-items: center;
   gap: 25px;
   padding: 20px 22px;
@@ -398,6 +422,63 @@ const clearCart = (): void =>
 }
 
 /* ITEM TOTAL */
+.item-note {
+  min-width: 0;
+  padding: 11px 13px;
+  border: 1px solid #f0e1d7;
+  border-radius: 10px;
+  background: #fffaf6;
+}
+
+.item-note label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 7px;
+  color: #6d625c;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.note-icon {
+  color: #e85d04;
+  font-size: 14px;
+}
+
+.item-note textarea {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 9px;
+  box-sizing: border-box;
+  resize: vertical;
+  border: 1px solid #eaded6;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  color: #333;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.item-note textarea::placeholder {
+  color: #b5aaa4;
+}
+
+.item-note textarea:focus {
+  border-color: #e85d04;
+  box-shadow: 0 0 0 3px rgba(232, 93, 4, .08);
+}
+
+.note-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 5px;
+  color: #aaa;
+  font-size: 10px;
+}
+
 .item-total {
   min-width: 110px;
   display: flex;
@@ -511,6 +592,10 @@ const clearCart = (): void =>
     gap: 18px;
   }
 
+  .item-note {
+    grid-column: 1 / -1;
+  }
+
   .quantity-section {
     align-items: flex-end;
   }
@@ -563,6 +648,11 @@ const clearCart = (): void =>
   .quantity-control button {
     width: 36px;
     height: 36px;
+  }
+
+  .item-note {
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .item-total {

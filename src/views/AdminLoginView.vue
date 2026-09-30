@@ -18,7 +18,7 @@ function login(): void {
     username.value === adminUsername &&
     password.value === adminPassword
   ) {
-    sessionStorage.setItem(
+    localStorage.setItem(
       'adminLoggedIn',
       'true'
     )

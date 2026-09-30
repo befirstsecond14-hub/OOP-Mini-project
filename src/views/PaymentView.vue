@@ -49,6 +49,7 @@ function confirmPayment(): void {
   paymentAmount.value = payment.getAmount()
 
   orderStore.addToHistory()
+  cartStore.clearCart()
 
   paymentSuccess.value = true
 }

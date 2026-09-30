@@ -8,6 +8,8 @@ const menuStore = useMenuStore()
 const cartStore = useCartStore()
 
 const searchText = ref('')
+const toastMessage = ref('')
+let toastTimer: ReturnType<typeof setTimeout> | null = null
 
 const menuCategories = computed(() => {
   const keyword = searchText.value.trim().toLowerCase()
@@ -34,6 +36,24 @@ const menuCategories = computed(() => {
 
 function addToCart(item: MenuItem): void {
   cartStore.addToCart(item)
+
+  const addedItem = cartStore.items.find(
+    cartItem => cartItem.getMenuItem().getId() === item.getId()
+  )
+
+  const quantity = addedItem?.getQuantity() ?? 1
+
+  toastMessage.value =
+    `${item.getName()} เพิ่มลงตะกร้าแล้ว จำนวน ${quantity}`
+
+  if (toastTimer) {
+    clearTimeout(toastTimer)
+  }
+
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+    toastTimer = null
+  }, 2800)
 }
 
 function formatPrice(price: number): string {
@@ -43,6 +63,18 @@ function formatPrice(price: number): string {
 
 <template>
   <div class="menu-page">
+
+    <Transition name="toast">
+      <div
+        v-if="toastMessage"
+        class="cart-toast"
+        role="status"
+        aria-live="polite"
+      >
+        <span class="toast-icon">✓</span>
+        <span>{{ toastMessage }}</span>
+      </div>
+    </Transition>
 
     <header class="menu-header">
       <div class="header-content">
@@ -211,6 +243,70 @@ function formatPrice(price: number): string {
 
 
 <style scoped>
+
+/* ==================== CART TOAST ==================== */
+
+.cart-toast {
+  position: fixed;
+  top: 88px;
+  right: 24px;
+  z-index: 2000;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 13px 17px;
+
+  border: 1px solid #f1dfd2;
+  border-radius: 12px;
+
+  background: #ffffff;
+  color: #333;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .12);
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.toast-icon {
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+  background: #e85d04;
+  color: #fff;
+
+  font-size: 13px;
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition: all .22s ease;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+@media (max-width: 600px) {
+  .cart-toast {
+    top: 76px;
+    right: 16px;
+    left: 16px;
+    max-width: none;
+  }
+}
 
 /* ==================== PAGE ==================== */
 

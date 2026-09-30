@@ -16,19 +16,32 @@ const formatPrice = (price: number) => {
 
 const getStatusText = (status: string) => {
   const statusMap: Record<string, string> = {
-    pending: 'รอดำเนินการ',
-    preparing: 'กำลังเตรียมอาหาร',
-    ready: 'พร้อมเสิร์ฟ',
-    completed: 'เสร็จสิ้น',
-    cancelled: 'ยกเลิก'
+    'รอรับออเดอร์': 'รอรับออเดอร์',
+    'กำลังเตรียมอาหาร': 'กำลังเตรียมอาหาร',
+    'รอเสิร์ฟ': 'รอเสิร์ฟ',
+    'กำลังจัดส่ง': 'กำลังจัดส่ง',
+    'เสิร์ฟเรียบร้อย': 'เสิร์ฟเรียบร้อย',
+    'จัดส่งเรียบร้อย': 'จัดส่งเรียบร้อย'
   }
 
   return statusMap[status] || status
 }
 
 const getStatusClass = (status: string) => {
-  return `status-${status}`
+  const classMap: Record<string, string> = {
+    'รอรับออเดอร์': 'status-pending',
+    'กำลังเตรียมอาหาร': 'status-preparing',
+    'รอเสิร์ฟ': 'status-ready',
+    'กำลังจัดส่ง': 'status-delivery',
+    'เสิร์ฟเรียบร้อย': 'status-served',
+    'จัดส่งเรียบร้อย': 'status-delivered'
+  }
+
+  return classMap[status] || 'status-default'
 }
+
+const formatOrderNumber = (id: number): string =>
+  String(id).padStart(4, '0')
 
 const viewOrder = (order: any) => {
   orderStore.currentOrder = order
@@ -128,7 +141,7 @@ const clearHistory = () => {
               <div>
 
                 <h2>
-                  คำสั่งซื้อ #{{ order.getId() }}
+                  คำสั่งซื้อ #{{ formatOrderNumber(order.getId()) }}
                 </h2>
 
                 <p>

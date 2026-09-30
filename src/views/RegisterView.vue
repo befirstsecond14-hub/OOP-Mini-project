@@ -112,6 +112,16 @@ function register(): void {
     return
   }
 
+  if (password.value.length < 6) {
+    errorMessage.value = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'
+    return
+  }
+
+  if (!/^\S+@\S+\.\S+$/.test(email.value.trim())) {
+    errorMessage.value = 'รูปแบบอีเมลไม่ถูกต้อง'
+    return
+  }
+
   if (password.value !== confirmPassword.value) {
     errorMessage.value = 'รหัสผ่านไม่ตรงกัน'
     return

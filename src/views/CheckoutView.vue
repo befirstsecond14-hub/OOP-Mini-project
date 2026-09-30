@@ -34,7 +34,7 @@ function submitOrder(): void {
   }
 
   const newOrder = new Order(
-    Date.now(),
+    orderStore.createOrderId(),
     customerName.value.trim(),
     tableNumber.value,
     orderNote.value.trim()
@@ -157,13 +157,30 @@ function goBack(): void {
             </button>
           </div>
         </div>
-        <div class="form-group">
-          <label for="order-note">หมายเหตุ</label>
-          <textarea
-            id="order-note"
-            v-model="orderNote"
-            placeholder="เช่น ไม่เผ็ด, ไม่ใส่ผัก"
-          />
+        <div class="form-group note-form-group">
+          <div class="note-label-row">
+            <label for="order-note">
+              <span class="note-title-icon">✎</span>
+              หมายเหตุเพิ่มเติม
+            </label>
+
+            <span class="note-optional">ไม่บังคับ</span>
+          </div>
+
+          <div class="note-box">
+            <textarea
+              id="order-note"
+              v-model="orderNote"
+              maxlength="200"
+              rows="4"
+              placeholder="เช่น ไม่เผ็ด, ไม่ใส่ผัก, ขอช้อนเพิ่ม..."
+            />
+
+            <div class="note-footer">
+              <span>แจ้งรายละเอียดเพิ่มเติมให้ร้านทราบ</span>
+              <span>{{ orderNote.length }}/200</span>
+            </div>
+          </div>
         </div>
 
       </section>
@@ -190,6 +207,10 @@ function goBack(): void {
 
               <p>
                 {{ item.getQuantity() }} ชิ้น
+              </p>
+
+              <p v-if="item.getNote()" class="item-note-preview">
+                ✎ {{ item.getNote() }}
               </p>
             </div>
 
@@ -346,6 +367,94 @@ function goBack(): void {
 .form-group input:focus {
   border-color: #e85d04;
   box-shadow: 0 0 0 3px rgba(232, 93, 4, .1);
+}
+
+.note-form-group {
+  margin-top: 4px;
+}
+
+.note-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+
+.note-label-row label {
+  margin-bottom: 0;
+}
+
+.note-title-icon {
+  color: #e85d04;
+  font-size: 15px;
+}
+
+.note-optional {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #f5f2ef;
+  color: #999;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.note-box {
+  padding: 10px;
+  border: 1px solid #f0e1d7;
+  border-radius: 12px;
+  background: #fffaf6;
+  transition: .2s;
+}
+
+.note-box:focus-within {
+  border-color: #e85d04;
+  box-shadow: 0 0 0 3px rgba(232, 93, 4, .08);
+}
+
+.note-box textarea {
+  width: 100%;
+  min-height: 92px;
+  padding: 11px 12px;
+  box-sizing: border-box;
+  resize: vertical;
+  border: 1px solid #eaded6;
+  border-radius: 9px;
+  outline: none;
+  background: #fff;
+  color: #333;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.note-box textarea::placeholder {
+  color: #b7ada7;
+}
+
+.note-box textarea:focus {
+  border-color: #e85d04;
+}
+
+.note-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 2px 0;
+  color: #a29a95;
+  font-size: 11px;
+}
+
+.item-note-preview {
+  max-width: 520px;
+  margin-top: 6px !important;
+  padding: 5px 8px;
+  border-left: 3px solid #e85d04;
+  border-radius: 4px;
+  background: #fff8f2;
+  color: #8a7163 !important;
+  font-size: 11px !important;
+  line-height: 1.5;
 }
 
 .table-options {
