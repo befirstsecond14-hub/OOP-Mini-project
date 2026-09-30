@@ -79,7 +79,9 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore
 import { ref } from 'vue'
+// @ts-ignore
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/userStore'
 
@@ -107,6 +109,16 @@ function register(): void {
 
   if (!password.value) {
     errorMessage.value = 'กรุณากรอกรหัสผ่าน'
+    return
+  }
+
+  if (password.value.length < 6) {
+    errorMessage.value = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'
+    return
+  }
+
+  if (!/^\S+@\S+\.\S+$/.test(email.value.trim())) {
+    errorMessage.value = 'รูปแบบอีเมลไม่ถูกต้อง'
     return
   }
 

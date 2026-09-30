@@ -20,6 +20,12 @@ const tableNumber = computed(() => {
   return currentOrder.value?.getTableNumber() ?? 0
 })
 
+const isTakeaway = computed(() => tableNumber.value === 0)
+
+const note = computed(() => {
+  return currentOrder.value?.getNote?.() ?? '-'
+})
+
 const status = computed(() => {
   return currentOrder.value?.getStatus() ?? 'ไม่พบสถานะ'
 })
@@ -38,6 +44,10 @@ const totalPrice = computed(() => {
 
 function formatPrice(price: number): string {
   return `${price.toLocaleString()} บาท`
+}
+
+function formatOrderNumber(id: number): string {
+  return String(id).padStart(4, '0')
 }
 
 function goToMenu(): void {
@@ -59,11 +69,11 @@ function getStatusStep(): number {
     return 2
   }
 
-  if (currentStatus === 'พร้อมเสิร์ฟ') {
+  if (currentStatus === 'รอเสิร์ฟ' || currentStatus === 'กำลังจัดส่ง') {
     return 3
   }
 
-  if (currentStatus === 'เสร็จสิ้น') {
+  if (currentStatus === 'เสิร์ฟเรียบร้อย' || currentStatus === 'จัดส่งเรียบร้อย') {
     return 4
   }
 
@@ -104,7 +114,7 @@ function getStatusStep(): number {
           </span>
 
           <h2>
-            #{{ orderId }}
+            #{{ formatOrderNumber(orderId) }}
           </h2>
         </div>
 
@@ -141,6 +151,8 @@ function getStatusStep(): number {
           </strong>
         </div>
 
+        <div><span>หมายเหตุ</span><strong>{{ note }}</strong></div>
+
         <div>
           <span>
             สถานะการชำระเงิน
@@ -173,6 +185,10 @@ function getStatusStep(): number {
 
             <p>
               จำนวน {{ item.getQuantity() }} ชิ้น
+            </p>
+
+            <p v-if="item.getNote()" class="item-note-preview">
+              ✎ {{ item.getNote() }}
             </p>
           </div>
 
@@ -305,7 +321,7 @@ function getStatusStep(): number {
             </div>
 
             <span>
-              พร้อมเสิร์ฟ
+              {{ isTakeaway ? 'กำลังจัดส่ง' : 'รอเสิร์ฟ' }}
             </span>
 
           </div>
@@ -335,7 +351,7 @@ function getStatusStep(): number {
             </div>
 
             <span>
-              เสร็จสิ้น
+              {{ isTakeaway ? 'จัดส่งเรียบร้อย' : 'เสิร์ฟเรียบร้อย' }}
             </span>
 
           </div>
@@ -395,6 +411,17 @@ function getStatusStep(): number {
 </template>
 
 <style scoped>
+.item-note-preview {
+  margin: 6px 0 0;
+  padding: 5px 8px;
+  border-left: 3px solid #e85d04;
+  border-radius: 4px;
+  background: #fff8f2;
+  color: #8a7163;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
 
 .order-page {
   min-height: calc(100vh - 70px);

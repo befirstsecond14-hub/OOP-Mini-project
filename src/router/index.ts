@@ -102,7 +102,7 @@ const router = createRouter({
 router.beforeEach((to) => {
   if (to.meta.requiresAdmin) {
     const isAdminLoggedIn =
-      sessionStorage.getItem('adminLoggedIn') === 'true'
+      localStorage.getItem('adminLoggedIn') === 'true'
 
     if (!isAdminLoggedIn) {
       return {

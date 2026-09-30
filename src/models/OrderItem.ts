@@ -1,5 +1,7 @@
 import { MenuItem } from './MenuItem'
 
+const MAX_NOTE_LENGTH = 200
+
 export class OrderItem {
   private quantity: number
   private note: string
@@ -9,8 +11,19 @@ export class OrderItem {
     quantity: number,
     note: string = ''
   ) {
-    this.quantity = quantity
-    this.note = note
+    this.quantity = OrderItem.validateQuantity(quantity)
+    this.note = OrderItem.normalizeNote(note)
+  }
+
+  private static validateQuantity(quantity: number): number {
+    if (!Number.isInteger(quantity) || quantity < 1) {
+      throw new Error('จำนวนสินค้าต้องเป็นจำนวนเต็มอย่างน้อย 1')
+    }
+    return quantity
+  }
+
+  private static normalizeNote(note: string): string {
+    return note.trim().slice(0, MAX_NOTE_LENGTH)
   }
 
   getMenuItem(): MenuItem {
@@ -26,17 +39,20 @@ export class OrderItem {
   }
 
   setNote(note: string): void {
-    this.note = note
+    this.note = OrderItem.normalizeNote(note)
   }
 
   increaseQuantity(): void {
-    this.quantity++
+    this.quantity += 1
   }
 
-  decreaseQuantity(): void {
-    if (this.quantity > 1) {
-      this.quantity--
+  decreaseQuantity(): boolean {
+    if (this.quantity <= 1) {
+      return false
     }
+
+    this.quantity -= 1
+    return true
   }
 
   getSubtotal(): number {

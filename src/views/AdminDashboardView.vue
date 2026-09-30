@@ -71,7 +71,7 @@ function goToOrder(): void {
 }
 
 function logout(): void {
-  sessionStorage.removeItem('adminLoggedIn')
+  localStorage.removeItem('adminLoggedIn')
   router.push('/admin-login')
 }
 </script>

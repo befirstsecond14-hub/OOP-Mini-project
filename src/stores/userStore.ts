@@ -131,12 +131,18 @@ export const useUserStore = defineStore('user', {
 
       const id = Date.now()
 
-      const newUser = new User(
-        id,
-        name,
-        email,
-        password
-      )
+      let newUser: User
+
+      try {
+        newUser = new User(
+          id,
+          name,
+          email,
+          password
+        )
+      } catch {
+        return false
+      }
 
       this.users.push(newUser)
 

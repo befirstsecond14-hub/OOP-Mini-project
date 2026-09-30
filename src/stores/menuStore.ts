@@ -146,8 +146,12 @@ export const useMenuStore = defineStore('menu', {
         return
       }
 
-      item.setName(name)
-      item.setPrice(price)
+      try {
+        item.setName(name)
+        item.setPrice(price)
+      } catch {
+        return
+      }
     }
   }
 })

@@ -81,6 +81,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore - Vue is provided by the project tooling/runtime and may not resolve in some editor setups
 import { ref } from 'vue'
 import { useUserStore } from '../stores/userStore'
 

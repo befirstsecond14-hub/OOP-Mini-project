@@ -1,6 +1,5 @@
 import { Order } from './Order'
 
-// 1. แยก Type ออกมาเพื่อให้เรียกใช้ซ้ำได้ง่าย
 export type PaymentStatus = 'ยังไม่ชำระ' | 'ชำระแล้ว'
 export type PaymentMethod = 'เงินสด' | 'โอนเงิน' | 'บัตรเครดิต'
 
@@ -11,7 +10,11 @@ export class Payment {
     private id: number,
     private order: Order,
     private method: PaymentMethod
-  ) {}
+  ) {
+    if (!Number.isInteger(id) || id <= 0) {
+      throw new Error('รหัสการชำระเงินไม่ถูกต้อง')
+    }
+  }
 
   getId(): number {
     return this.id
@@ -21,7 +24,6 @@ export class Payment {
     return this.order
   }
 
-  // 2. ปรับ Return Type ให้ตรงกับ Type ที่เราสร้างไว้
   getMethod(): PaymentMethod {
     return this.method
   }
@@ -35,9 +37,11 @@ export class Payment {
   }
 
   pay(): void {
+    if (this.status === 'ชำระแล้ว') {
+      return
+    }
+
     this.status = 'ชำระแล้ว'
-    
-    // 3. (ทางเลือก) อัปเดตสถานะของ Order เมื่อชำระเงินสำเร็จ
-    // this.order.markAsPaid() 
+    this.order.markAsPaid()
   }
 }
